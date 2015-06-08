@@ -26,4 +26,11 @@ public class HashTableSection extends Section {
     public int getChain(int index) {
         return chains[index];
     }
+
+    public int getNBuckets() {
+        return nbucket;
+    }
+    public int getNChains() {
+        return nchain;
+    }
 }

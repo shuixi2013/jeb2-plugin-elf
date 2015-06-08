@@ -1,13 +1,16 @@
 package com.pnf.ELF;
 
 import java.io.ByteArrayInputStream;
+import java.util.Arrays;
 
 
 public class Section extends StreamReader {
 
     protected int s_size;
     protected int s_offset;
+    protected StringTableSection nameTable;
     protected ByteArrayInputStream stream;
+    protected byte[] data;
     /**
      * @param s_type
      * @param s_size
@@ -22,14 +25,11 @@ public class Section extends StreamReader {
         stream.skip(s_offset);
         this.s_size = s_size;
         this.s_offset = s_offset;
+        this.data = data;
     }
 
     public byte[] getBytes() {
-        byte[] output = new byte[s_size];
-        stream.reset();
-        stream.skip(s_offset);
-        stream.read(output, 0, s_size);
-        return output;
+        return Arrays.copyOfRange(data, s_offset, s_offset + s_size);
     }
 
     public int getOffset() {
@@ -37,5 +37,8 @@ public class Section extends StreamReader {
     }
     public int getSize() {
         return s_size;
+    }
+    public void setNameTable(StringTableSection nameTable) {
+        this.nameTable = nameTable;
     }
 }

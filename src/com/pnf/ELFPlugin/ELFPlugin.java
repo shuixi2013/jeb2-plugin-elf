@@ -1,4 +1,4 @@
-package com.pnf.ELF;
+package com.pnf.ELFPlugin;
 
 import com.pnfsoftware.jeb.core.PluginInformation;
 import com.pnfsoftware.jeb.core.properties.IPropertyDefinitionManager;
@@ -9,7 +9,6 @@ import com.pnfsoftware.jeb.core.units.IUnit;
 import com.pnfsoftware.jeb.core.units.IUnitProcessor;
 import com.pnfsoftware.jeb.util.logging.GlobalLog;
 import com.pnfsoftware.jeb.util.logging.ILogger;
-
 
 public class ELFPlugin extends AbstractUnitIdentifier {
     private static final ILogger logger = GlobalLog.getLogger(ELFPlugin.class);

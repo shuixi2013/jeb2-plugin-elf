@@ -20,6 +20,7 @@ public class SectionHeader extends StreamReader {
     protected int s_addralign;
     protected int s_entsize;
     protected Section section;
+    protected StringTableSection nameTable;
 
 
 
@@ -64,7 +65,7 @@ public class SectionHeader extends StreamReader {
                 section = new Section(data, s_size, s_offset);
                 break;
             case ELF.SHT_SYMTAB:
-                section = new SymbolTableSection(data, s_size, s_offset, s_entsize);
+                section = new SymbolTableSection(data, s_size, s_offset, s_entsize, this.nameTable);
                 s_type_s = "SHT_SYMTAB";
                 break;
             case ELF.SHT_STRTAB:
@@ -100,7 +101,7 @@ public class SectionHeader extends StreamReader {
                 s_type_s = "SHT_SHLIB";
                 break;
             case ELF.SHT_DYNSYM:
-                section = new Section(data, s_size, s_offset);
+                section = new SymbolTableSection(data, s_size, s_offset, s_entsize, this.nameTable);
                 s_type_s = "SHT_DYNSYM";
                 break;
             case ELF.SHT_LOPROC:
@@ -142,4 +143,10 @@ public class SectionHeader extends StreamReader {
     public Section getSection() {
          return section;
     }
+
+    public void setNameTable(StringTableSection nameTable) {
+        this.nameTable = nameTable;
+        this.section.setNameTable(nameTable);
+    }
 }
+

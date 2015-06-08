@@ -14,12 +14,12 @@ public class ELFFile {
     public ELFFile(byte[] data) {
         header = new Header(data);
 
-        sectionHeaderTable = new SectionHeaderTable(data, header.getE_shoff(), header.getE_shentsize(), header.getE_shnum(), header.getE_shstrndx());
+        sectionHeaderTable = new SectionHeaderTable(data, header.getShoff(), header.getShentsize(), header.getShnum(), header.getShstrndx());
 
         sections = sectionHeaderTable.getSections();
 
 
-        programHeaderTable = new ProgramHeaderTable(data, header.getE_phoff(), header.getE_phentsize(), header.getE_phnum());
+        programHeaderTable = new ProgramHeaderTable(data, header.getPhoff(), header.getPhentsize(), header.getPhnum());
 
     }
 

@@ -1,12 +1,11 @@
-package com.pnf.ELF;
+package com.pnf.ELFPlugin;
 
-import java.io.IOException;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.pnf.ELF.ELF;
+import com.pnf.ELF.ELFFile;
+import com.pnf.ELF.SectionHeader;
 import com.pnfsoftware.jeb.core.actions.InformationForActionExecution;
 import com.pnfsoftware.jeb.core.output.AbstractUnitRepresentation;
 import com.pnfsoftware.jeb.core.output.IInfiniDocument;
@@ -37,7 +36,7 @@ public class ELFUnit extends AbstractBinaryUnit implements IInteractiveUnit {
         for(SectionHeader section : elf.getSectionHeaderTable().getHeaders()) {
             switch(section.getType()) {
                 case ELF.SHT_PROGBITS:
-                    unitProcessor.process(section.getName(), section.getSection().getBytes(), this);
+                    children.add(unitProcessor.process(section.getName(), section.getSection().getBytes(), this));
                     break;
             }
         }
@@ -64,6 +63,24 @@ public class ELFUnit extends AbstractBinaryUnit implements IInteractiveUnit {
                         @Override
                         public IInfiniDocument getDocument() {
                             return new StringTableDocument(section);
+                        }
+                    });
+                    break;
+                case ELF.SHT_HASH:
+                    formatter.addDocumentPresentation(new AbstractUnitRepresentation(section.getName(), false) {
+                        @Override
+                        public IInfiniDocument getDocument() {
+                            return new HashTableDocument(section);
+                        }
+                    });
+                    break;
+
+                case ELF.SHT_DYNSYM:
+                case ELF.SHT_SYMTAB:
+                    formatter.addDocumentPresentation(new AbstractUnitRepresentation(section.getName(), false) {
+                        @Override
+                        public IInfiniDocument getDocument() {
+                            return new SymbolTableDocument(section);
                         }
                     });
                     break;

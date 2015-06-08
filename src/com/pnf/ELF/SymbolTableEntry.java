@@ -17,17 +17,16 @@ public class SymbolTableEntry extends StreamReader {
     protected int st_type;
     protected String st_type_s;
 
-    public SymbolTableEntry(byte[] data, int offset, StringTableSection names) {
+    public SymbolTableEntry(byte[] data, int offset) {
         stream = new ByteArrayInputStream(data);
         stream.skip(offset);
 
         st_name = readInt(stream);
-        st_name_s = names.getString(st_name);
 
         st_value = readInt(stream);
         st_size = readInt(stream);
-        st_info = readInt(stream);
-        st_other = readInt(stream);
+        st_info = stream.read();
+        st_other = stream.read();
         st_shndex = readShort(stream);
         st_bind = st_info >> 4;
         switch(st_bind) {
@@ -75,6 +74,10 @@ public class SymbolTableEntry extends StreamReader {
             default:
                 st_type_s = "UNKNOWN";
         }
+    } 
+
+    public void setName(StringTableSection nameTable) {
+        this.st_name_s = nameTable.getString(st_name);
     } 
     public String getName() {
          return st_name_s;

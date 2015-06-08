@@ -31,10 +31,24 @@ public class SectionHeaderTable extends StreamReader {
         
         NameSectionHeader names = new NameSectionHeader(data, shentsize, shoff + shstrndx * shentsize);
 
+        StringTableSection nameTable = null;
         SectionHeader header;
+        // First pass
         for(int sh_index=0; sh_index < shnum; sh_index++) {
             header = new SectionHeader(data, shentsize, shoff + sh_index * shentsize, names);
             entries.add(header);
+            if(header.getType() == ELF.SHT_STRTAB) {
+                if(header.getName().equals(".dynstr") || header.getName().equals(".strtab")) {
+                    nameTable = (StringTableSection)header.getSection();
+                }
+            }
+        }
+        // Second pass
+        for(int index=0; index < entries.size(); index++) {
+            header = entries.get(index);
+            if(header.getType() == ELF.SHT_DYNSYM || header.getType() == ELF.SHT_SYMTAB) {
+                header.setNameTable(nameTable);
+            }
         }
     }
 
