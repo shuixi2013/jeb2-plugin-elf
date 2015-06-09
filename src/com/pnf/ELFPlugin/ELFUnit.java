@@ -55,6 +55,12 @@ public class ELFUnit extends AbstractBinaryUnit implements IInteractiveUnit {
     public IUnitFormatter getFormatter() {
         List<SectionHeader> sectionHeaders = elf.getSectionHeaderTable().getHeaders();
         UnitFormatterAdapter formatter = new UnitFormatterAdapter();
+        formatter.addDocumentPresentation(new AbstractUnitRepresentation("Section Header Table", true) {
+            @Override
+            public IInfiniDocument getDocument() {
+                return new SectionHeaderTableDocument(elf.getSectionHeaderTable());
+            }
+        });
 
         for(SectionHeader section : sectionHeaders) {
             switch(section.getType()) {

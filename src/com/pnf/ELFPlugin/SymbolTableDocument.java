@@ -28,7 +28,6 @@ public class SymbolTableDocument extends JebEventSource implements ITableDocumen
         rows = new ArrayList<>();
 
         section = (SymbolTableSection)(header.getSection());
-        
 
         List<Cell> cells;
         List<SymbolTableEntry> entries = section.getEntries();

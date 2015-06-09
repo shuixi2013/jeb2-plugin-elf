@@ -1,7 +1,12 @@
 package com.pnf.ELF;
 
 public class ELF {
-    // Holds constants
+    // Class to hold constants
+    
+
+
+
+    // S(ection)H(eader)T(ype) constants
     public static final int SHT_NULL = 0;
     public static final int SHT_PROGBITS = 1;
     public static final int SHT_SYMTAB = 2;
@@ -35,7 +40,9 @@ public class ELF {
 
     // Elf data constants
     public static final byte ELFDATANONE = 0;
+    // 2's complement little endian
     public static final byte ELFDATA2LSB = 1;
+    // 2's complement big endian
     public static final byte ELFDATA2MSB = 2;
 
     // Elf version constants
@@ -75,6 +82,7 @@ public class ELF {
     public static final int ELFOSABI_ARM = 97;          // ARM
     public static final int ELFOSABI_STANDALONE = 255;  // Standalone (embedded) application
 
+    // ELF machine
     public static final int EM_NONE          = 0; // No machine
     public static final int EM_M32           = 1; // AT&T WE 32100
     public static final int EM_SPARC         = 2; // SPARC
@@ -229,5 +237,33 @@ public class ELF {
     public static final int EM_RL78          = 197; // Renesas RL78 family
     public static final int EM_VIDEOCORE5    = 198; // Broadcom VideoCore V processor
     public static final int EM_78KOR         = 199; // Renesas 78KOR family
-    public static final int EM_56800EX       = 200; // Freescale 56800EX Digital Signal Controller (DSC)
+    public static final int EM_56800EX       = 200; // Freescale 56800EX Digital Signal Controller (DSCc)
+
+    // Dynamic array tags
+	public static final int DT_NULL = 0;
+	public static final int DT_NEEDED = 1;
+	public static final int DT_PLTRELSZ = 2;
+	public static final int DT_PLTGOT = 3;
+	public static final int DT_HASH = 4;
+	public static final int DT_STRTAB = 5;
+	public static final int DT_SYMTAB = 6;
+	public static final int DT_RELASZ = 8;
+	public static final int DT_RELAENT = 9;
+	public static final int DT_RELA = 7;
+	public static final int DT_STRSZ = 10;
+	public static final int DT_SYMENT = 11;
+	public static final int DT_INIT = 12;
+	public static final int DT_FINI = 13;
+	public static final int DT_SONAME = 14;
+	public static final int DT_RPATH = 15;
+	public static final int DT_SYMBOLIC = 16;
+	public static final int DT_REL = 17;
+	public static final int DT_RELSZ = 18;
+	public static final int DT_RELENT = 19;
+	public static final int DT_PLTREL = 20;
+	public static final int DT_DEBUG = 21;
+	public static final int DT_TEXTREL = 22;
+	public static final int DT_JMPREL = 23;
+	public static final int DT_LOPROC = 0x70000000;
+	public static final int DT_HIPROC = 0x7fffffff;
 }

@@ -140,9 +140,36 @@ public class SectionHeader extends StreamReader {
         return s_type;
     }
 
+    public String getType_s() {
+        return s_type_s;
+    }
+
     public Section getSection() {
          return section;
     }
+    
+    public int getAddress() {
+        return s_addr;
+    }
+    public int getLink() {
+        return s_link;
+    }
+    public int getInfo() {
+        return s_info;
+    }
+    public int getAddressAlign() {
+        return s_addralign;
+    }
+
+    public String getFlags() {
+        String output = "";
+        for(String flag : s_flags_s) {
+            //output += flag.replace("SHF_", "").charAt(0);
+            output += flag + "\n";
+        }
+        return output;
+    }
+
 
     public void setNameTable(StringTableSection nameTable) {
         this.nameTable = nameTable;

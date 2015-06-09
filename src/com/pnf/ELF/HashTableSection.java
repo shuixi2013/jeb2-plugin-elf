@@ -2,21 +2,21 @@ package com.pnf.ELF;
 
 public class HashTableSection extends Section {
 
-    private int nbucket;
-    private int nchain;
+    private int numBuckets;
+    private int numChain;
     private int[] buckets;
     private int[] chains;
     public HashTableSection(byte[] data, int s_size, int s_offset) {
         super(data, s_size, s_offset);
 
-        nbucket = readInt(stream);
-        nchain = readInt(stream);
+        numBuckets = readInt(stream);
+        numChain = readInt(stream);
         
-        buckets = new int[nbucket];
-        for(int index=0; index < nbucket; index++) 
+        buckets = new int[numBuckets];
+        for(int index=0; index < numBuckets; index++) 
             buckets[index] = readInt(stream);
-        chains = new int[nchain];
-        for(int index=0; index < nchain; index++) 
+        chains = new int[numChain];
+        for(int index=0; index < numChain; index++) 
             chains[index] = readInt(stream);
     }
 
@@ -28,9 +28,9 @@ public class HashTableSection extends Section {
     }
 
     public int getNBuckets() {
-        return nbucket;
+        return numBuckets;
     }
     public int getNChains() {
-        return nchain;
+        return numChain;
     }
 }
