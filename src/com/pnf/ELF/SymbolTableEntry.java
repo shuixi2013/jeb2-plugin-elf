@@ -5,130 +5,110 @@ import java.io.ByteArrayInputStream;
 public class SymbolTableEntry extends StreamReader {
     protected ByteArrayInputStream stream;
 
-    protected int st_name;
-    protected String st_name_s;
-    protected int st_value;
-    protected int st_size;
-    protected int st_info;
-    protected int st_other;
-    protected short st_shndex;
-    protected int st_bind;
-    protected String st_bind_s;
-    protected int st_type;
-    protected String st_type_s;
+    protected int name;
+    protected String nameString;
+    protected int value;
+    protected int size;
+    protected int info;
+    protected int other;
+    protected short sectionHeaderIndex;
+    protected int bind;
+    protected String bindString;
+    protected int type;
+    protected String typeString;
 
     public SymbolTableEntry(byte[] data, int offset) {
         stream = new ByteArrayInputStream(data);
         stream.skip(offset);
 
-        st_name = readInt(stream);
+        name = readInt(stream);
 
-        st_value = readInt(stream);
-        st_size = readInt(stream);
-        st_info = stream.read();
-        st_other = stream.read();
-        st_shndex = readShort(stream);
-        st_bind = st_info >> 4;
-        switch(st_bind) {
-            case 0:
-                st_bind_s = "STB_LOCAL";
+        value = readInt(stream);
+        size = readInt(stream);
+        info = stream.read();
+        other = stream.read();
+        sectionHeaderIndex = readShort(stream);
+        bind = info >> 4;
+        switch(bind) {
+            case ELF.STB_LOCAL:
+                bindString = "STB_LOCAL";
                 break;
-            case 1:
-                st_bind_s = "STB_GLOBAL";
+            case ELF.STB_GLOBAL:
+                bindString = "STB_GLOBAL";
                 break;
-            case 2:
-                st_bind_s = "STB_WEAK";
+            case ELF.STB_WEAK:
+                bindString = "STB_WEAK";
                 break;
-            case 13:
-                st_bind_s = "STB_LOPROC";
+            case ELF.STB_LOPROC:
+                bindString = "STB_LOPROC";
                 break;
-            case 15:
-                st_bind_s = "STB_HIPROC";
+            case ELF.STB_HIPROC:
+                bindString = "STB_HIPROC";
                 break;
             default:
-                st_bind_s = "UNKNOWN";
+                bindString = "UNKNOWN";
         }
-        st_type = st_info & 0xf;
-        switch(st_type) {
-            case 0:
-                st_type_s = "STT_NOTYPE";
+        type = info & 0xf;
+        switch(type) {
+            case ELF.STT_NOTYPE:
+                typeString = "STT_NOTYPE";
                 break;
-            case 1:
-                st_type_s = "STT_OBJECT";
+            case ELF.STT_OBJECT:
+                typeString = "STT_OBJECT";
                 break;
-            case 2:
-                st_type_s = "STT_FUNC";
+            case ELF.STT_FUNC:
+                typeString = "STT_FUNC";
                 break;
-            case 3:
-                st_type_s = "STT_SECTION";
+            case ELF.STT_SECTION:
+                typeString = "STT_SECTION";
                 break;
-            case 4:
-                st_type_s = "STT_FILE";
+            case ELF.STT_FILE:
+                typeString = "STT_FILE";
                 break;
-            case 13:
-                st_type_s = "STT_LOPROC";
+            case ELF.STT_LOPROC:
+                typeString = "STT_LOPROC";
                 break;
-            case 15:
-                st_type_s = "STT_HIPROC";
+            case ELF.STT_HIPROC:
+                typeString = "STT_HIPROC";
                 break;
             default:
-                st_type_s = "UNKNOWN";
+                typeString = "UNKNOWN";
         }
     } 
 
     public void setName(StringTableSection nameTable) {
-        this.st_name_s = nameTable.getString(st_name);
+        this.nameString = nameTable.getString(name);
     } 
     public String getName() {
-         return st_name_s;
+         return nameString;
     }
 
-    /**
-     * @return the st_value
-     */
     public int getValue() {
-        return st_value;
+        return value;
     }
 
-    /**
-     * @return the st_size
-     */
     public int getSize() {
-        return st_size;
+        return size;
     }
 
-    /**
-     * @return the st_info
-     */
     public int getInfo() {
-        return st_info;
+        return info;
     }
 
-    /**
-     * @return the st_other
-     */
     public int getOther() {
-        return st_other;
+        return other;
     }
 
-    /**
-     * @return the st_shndex
-     */
-    public short getShndex() {
-        return st_shndex;
+
+    public short getSectionHeaderIndex() {
+        return sectionHeaderIndex;
     }
 
-    /**
-     * @return the st_bind_s
-     */
-    public String getBind_s() {
-        return st_bind_s;
+    public String getBindString() {
+        return bindString;
     }
 
-    /**
-     * @return the st_type_s
-     */
-    public String getType_s() {
-        return st_type_s;
+    public String getTypeString() {
+        return typeString;
     }
 }

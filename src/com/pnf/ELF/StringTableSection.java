@@ -16,6 +16,7 @@ public class StringTableSection extends Section {
         return text;
     }
     public String[] getEntries() {
+    	// Split on regex that is every null character
         return getText().split("[" + (char)0 + "]");
     }
 }

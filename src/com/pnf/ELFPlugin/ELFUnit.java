@@ -24,17 +24,21 @@ import com.pnfsoftware.jeb.util.logging.ILogger;
 public class ELFUnit extends AbstractBinaryUnit implements IInteractiveUnit {
     private static final ILogger logger = GlobalLog.getLogger(ELFUnit.class);
     private ELFFile elf;
+
     public ELFUnit(String name, byte[] data, IUnitProcessor unitProcessor, IUnit parent, IPropertyDefinitionManager pdm) {
         super("", data, "ELF_file", name, unitProcessor, parent, pdm);
     }
+
     public ELFUnit(IBinaryFrames serializedData, IUnitProcessor unitProcessor, IUnit parent, IPropertyDefinitionManager pdm) {
         super(serializedData, unitProcessor, parent, pdm);
     }
+
     @Override
     public boolean process() {
         elf = new ELFFile(data);
         for(SectionHeader section : elf.getSectionHeaderTable().getHeaders()) {
             switch(section.getType()) {
+                // Send any binary sections to be processed
                 case ELF.SHT_PROGBITS:
                     children.add(unitProcessor.process(section.getName(), section.getSection().getBytes(), this));
                     break;
@@ -43,10 +47,6 @@ public class ELFUnit extends AbstractBinaryUnit implements IInteractiveUnit {
         return false;
     }
 
-    @Override
-    public String getNotes() {
-        return "";
-    }
     @Override
     public IBinaryFrames serialize() {
         return null;
@@ -92,21 +92,10 @@ public class ELFUnit extends AbstractBinaryUnit implements IInteractiveUnit {
                     break;
             }
         }
-        /*formatter.addDocumentPresentation(new AbstractUnitRepresentation("Tree view", true) {
-            @Override
-            public IInfiniDocument getDocument() {
-                return new TextFileTreeDocument(TextFileUnit.this);
-            }
-        });*/
-        /*formatter.addDocumentPresentation(new AbstractUnitRepresentation("Formatted Text", true) {
-            @Override
-            public IInfiniDocument getDocument() {
-                return new TextFileDocument(TextFileUnit.this);
-            }
-        });*/
         return formatter;
     }
 
+    // No actions available at the moment
     @Override
     public boolean executeAction(InformationForActionExecution info) {
         return false;

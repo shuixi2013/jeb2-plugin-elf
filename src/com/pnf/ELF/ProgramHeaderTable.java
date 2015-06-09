@@ -7,17 +7,17 @@ import java.util.List;
 
 public class ProgramHeaderTable extends StreamReader {
 
-    private int phoff;
-    private int phentsize;
-    private int phnum;
+    private int offset;
+    private int entrySize;
+    private int number;
     private List<ProgramHeader> entries = new ArrayList<>();
-    public ProgramHeaderTable(byte[] data, int phoff, int phentsize, int phnum) {
+    public ProgramHeaderTable(byte[] data, int offset, int entrySize, int number) {
 
         ByteArrayInputStream stream = new ByteArrayInputStream(data);
-        stream.skip(phoff);
+        stream.skip(offset);
 
-        for(int index=0; index < phnum; index++) {
-             entries.add(new ProgramHeader(data, phoff + phentsize * index));
+        for(int index=0; index < number; index++) {
+             entries.add(new ProgramHeader(data, offset + entrySize * index));
         }
 
 

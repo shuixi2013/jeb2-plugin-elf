@@ -13,9 +13,6 @@ import com.pnfsoftware.jeb.util.logging.ILogger;
 
 public class ELFPlugin extends AbstractUnitIdentifier {
     private static final ILogger logger = GlobalLog.getLogger(ELFPlugin.class);
-    static {
-        System.out.println("ELFPlugin Loaded");
-    }
 
 
     public ELFPlugin() {
@@ -44,6 +41,7 @@ public class ELFPlugin extends AbstractUnitIdentifier {
         return unit;
     }
 
+    // Does not support saving yet
     @Override
     public IUnit reload(IBinaryFrames serializedData, IUnitProcessor unitProcessor, 
             IUnit parent) {

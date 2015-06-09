@@ -10,6 +10,7 @@ import com.pnfsoftware.jeb.core.events.JebEventSource;
 import com.pnfsoftware.jeb.core.output.table.ITableDocument;
 import com.pnfsoftware.jeb.core.output.table.ITableDocumentPart;
 import com.pnfsoftware.jeb.core.output.table.impl.Cell;
+import com.pnfsoftware.jeb.core.output.table.impl.TableDocumentPart;
 import com.pnfsoftware.jeb.core.output.table.impl.TableRow;
 import com.pnfsoftware.jeb.util.logging.GlobalLog;
 import com.pnfsoftware.jeb.util.logging.ILogger;
@@ -32,16 +33,15 @@ public class SymbolTableDocument extends JebEventSource implements ITableDocumen
         List<Cell> cells;
         List<SymbolTableEntry> entries = section.getEntries();
         SymbolTableEntry entry;
-        logger.info("%d entries", entries.size());
         for(int index=0; index < entries.size(); index++) {
             cells = new ArrayList<>();
             entry = entries.get(index);
             cells.add(new Cell("" + entry.getName()));
             cells.add(new Cell(String.format("%h", entry.getValue())));
             cells.add(new Cell(String.format("%h", entry.getSize())));
-            cells.add(new Cell("" + entry.getType_s()));
-            cells.add(new Cell("" + entry.getBind_s()));
-            cells.add(new Cell("" + entry.getShndex()));
+            cells.add(new Cell("" + entry.getTypeString()));
+            cells.add(new Cell("" + entry.getBindString()));
+            cells.add(new Cell("" + entry.getSectionHeaderIndex()));
             rows.add(new TableRow(cells));
         }
     }
@@ -70,7 +70,7 @@ public class SymbolTableDocument extends JebEventSource implements ITableDocumen
 
     @Override
     public ITableDocumentPart getTablePart(int start, int count) {
-        return new StringTableDocumentPart(start, rows.subList(start, start+count));
+        return new TableDocumentPart(start, rows.subList(start, start+count));
     }
 
 

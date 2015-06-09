@@ -5,17 +5,17 @@ import java.util.List;
 
 public class SymbolTableSection extends Section {
 
-    private int sh_entsize;
+    private int entrySize;
     private List<SymbolTableEntry> entries = new ArrayList<>();
 
     private StringTableSection nameTable;
 
-    public SymbolTableSection(byte[] data, int sh_size, int sh_offset, int sh_entsize, StringTableSection nameTable) {
-        super(data, sh_size, sh_offset);
-        this.sh_entsize = sh_entsize;
+    public SymbolTableSection(byte[] data, int size, int offset, int entrySize, StringTableSection nameTable) {
+        super(data, size, offset);
+        this.entrySize = entrySize;
         this.nameTable = nameTable;
-        for(int index=0; index < sh_size / sh_entsize; index++) {
-            entries.add(new SymbolTableEntry(data, sh_offset + index * sh_entsize));
+        for(int index=0; index < size / entrySize; index++) {
+            entries.add(new SymbolTableEntry(data, offset + index * entrySize));
         }
     }
 

@@ -7,8 +7,24 @@ public class DynamicSection extends Section {
     private int val;
     private int ptr;
 
-    public DynamicSection(byte[] data, int s_size, int s_offset) {
-        super(data, s_size, s_offset);
+    public int getTag() {
+		return tag;
+	}
+
+	public int getUn() {
+		return un;
+	}
+
+	public int getVal() {
+		return val;
+	}
+
+	public int getPtr() {
+		return ptr;
+	}
+
+	public DynamicSection(byte[] data, int size, int offset) {
+        super(data, size, offset);
 
         tag = readInt(stream);
         un = readInt(stream);

@@ -4,70 +4,99 @@ import java.io.ByteArrayInputStream;
 
 public class ProgramHeader extends StreamReader {
 
-    private int p_type;
-    private String p_type_s;
-    private int p_offset;
-    private int p_vaddr;
-    private int p_paddr;
-    private int p_filesz;
-    private int p_memsz;
-    private int p_flags;
-    private int p_align;
+    private int type;
+    private String typeString;
+    public int getType() {
+		return type;
+	}
+
+	public String getTypeString() {
+		return typeString;
+	}
+
+	public int getOffset() {
+		return offset;
+	}
+
+	public int getVaddr() {
+		return vaddr;
+	}
+
+	public int getPaddr() {
+		return paddr;
+	}
+
+	public int getFileSize() {
+		return fileSize;
+	}
+
+	public int getMemorySize() {
+		return memorySize;
+	}
+
+	public int getFlags() {
+		return flags;
+	}
+
+	public int getAlign() {
+		return align;
+	}
+
+	public Section getSection() {
+		return section;
+	}
+
+	private int offset;
+    private int vaddr;
+    private int paddr;
+    private int fileSize;
+    private int memorySize;
+    private int flags;
+    private int align;
     private Section section;
 
-    private static final int PT_NULL = 0;
-    private static final int PT_LOAD = 1;
-    private static final int PT_DYNAMIC = 2;
-    private static final int PT_INTERP = 3;
-    private static final int PT_NOTE = 4;
-    private static final int PT_SHLIB = 5;
-    private static final int PT_PHDR = 6;
-    private static final int PT_LOPROC = 0x70000000;
-    private static final int PT_HIPROC = 0x7fffffff;
-
-    public ProgramHeader(byte[] data, int offset) {
+    public ProgramHeader(byte[] data, int sectionOffset) {
         ByteArrayInputStream stream = new ByteArrayInputStream(data);
-        stream.skip(offset);
-        p_type = readInt(stream);
-        p_offset = readInt(stream);
-        p_vaddr = readInt(stream);
-        p_paddr = readInt(stream);
-        p_filesz = readInt(stream);
-        p_memsz = readInt(stream);
-        p_flags = readInt(stream);
-        p_align = readInt(stream);
+        stream.skip(sectionOffset);
+        type = readInt(stream);
+        offset = readInt(stream);
+        vaddr = readInt(stream);
+        paddr = readInt(stream);
+        fileSize = readInt(stream);
+        memorySize = readInt(stream);
+        flags = readInt(stream);
+        align = readInt(stream);
 
-        switch(p_type) {
-            case PT_NULL:
-                p_type_s = "PT_NULL";
+        switch(type) {
+            case ELF.PT_NULL:
+                typeString = "PT_NULL";
                 break;
-            case PT_LOAD:
-                p_type_s = "PT_LOAD";
+            case ELF.PT_LOAD:
+                typeString = "PT_LOAD";
                 break;
-            case PT_DYNAMIC:
-                p_type_s = "PT_DYNAMIC";
+            case ELF.PT_DYNAMIC:
+                typeString = "PT_DYNAMIC";
                 break;
-            case PT_INTERP:
-                p_type_s = "PT_INTERP";
+            case ELF.PT_INTERP:
+                typeString = "PT_INTERP";
                 break;
-            case PT_NOTE:
-                //section = new NoteSection(data, p_size, p_offset);
-                p_type_s = "PT_NOTE";
+            case ELF.PT_NOTE:
+                typeString = "PT_NOTE";
                 break;
-            case PT_SHLIB:
-                p_type_s = "PT_SHLIB";
+            case ELF.PT_SHLIB:
+                typeString = "PT_SHLIB";
                 break;
-            case PT_PHDR:
-                p_type_s = "PT_PHDR";
+            case ELF.PT_PHDR:
+                typeString = "PT_PHDR";
                 break;
-            case PT_LOPROC:
-                p_type_s = "PT_LOPROC";
+            case ELF.PT_LOPROC:
+                typeString = "PT_LOPROC";
                 break;
-            case PT_HIPROC:
-                p_type_s = "PT_HIPROC";
+            case ELF.PT_HIPROC:
+                typeString = "PT_HIPROC";
                 break;
             default:
-                p_type_s = "UNKNOWN";
+                typeString = "UNKNOWN";
         }
     }
 

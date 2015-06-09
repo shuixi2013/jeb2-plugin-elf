@@ -3,28 +3,28 @@ package com.pnf.ELF;
 import java.io.ByteArrayInputStream;
 
 public class NoteSectionEntry extends StreamReader {
-    private int namesz;
-    private int descsz;
+    private int nameSize;
+    private int descSize;
     private String name = "";
     private String desc = "";
 
-    public NoteSectionEntry(byte[] data, int se_size, int se_offset) {
+    public NoteSectionEntry(byte[] data, int size, int offset) {
         ByteArrayInputStream stream = new ByteArrayInputStream(data);
-        stream.skip(se_offset);
+        stream.skip(offset);
 
-        namesz = readInt(stream);
-        descsz = readInt(stream);
+        nameSize = readInt(stream);
+        descSize = readInt(stream);
 
-        byte[] nameBytes = new byte[namesz];
-        stream.read(nameBytes, 0, namesz);
+        byte[] nameBytes = new byte[nameSize];
+        stream.read(nameBytes, 0, nameSize);
         name = new String(nameBytes);
 
         // Skip the padding bytes, aligned to 4 byte words
-        stream.skip(4 - namesz % 4);
+        stream.skip(4 - nameSize % 4);
 
-        if(descsz > 0) {
-            byte[] descBytes = new byte[descsz];
-            stream.read(descBytes, 0, descsz);
+        if(descSize > 0) {
+            byte[] descBytes = new byte[descSize];
+            stream.read(descBytes, 0, descSize);
             desc = new String(descBytes);
         }
 

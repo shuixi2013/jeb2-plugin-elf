@@ -9,6 +9,7 @@ import com.pnfsoftware.jeb.core.events.JebEventSource;
 import com.pnfsoftware.jeb.core.output.table.ITableDocument;
 import com.pnfsoftware.jeb.core.output.table.ITableDocumentPart;
 import com.pnfsoftware.jeb.core.output.table.impl.Cell;
+import com.pnfsoftware.jeb.core.output.table.impl.TableDocumentPart;
 import com.pnfsoftware.jeb.core.output.table.impl.TableRow;
 
 public class HashTableDocument extends JebEventSource implements ITableDocument {
@@ -55,7 +56,7 @@ public class HashTableDocument extends JebEventSource implements ITableDocument 
 
     @Override
     public ITableDocumentPart getTablePart(int start, int count) {
-        return new StringTableDocumentPart(start, rows.subList(start, start+count));
+        return new TableDocumentPart(start, rows.subList(start, start+count));
     }
 
 

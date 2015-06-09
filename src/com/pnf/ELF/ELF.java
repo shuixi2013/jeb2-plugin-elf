@@ -6,7 +6,7 @@ public class ELF {
 
 
 
-    // S(ection)H(eader)T(ype) constants
+    // SHT (Section Header Type) constants
     public static final int SHT_NULL = 0;
     public static final int SHT_PROGBITS = 1;
     public static final int SHT_SYMTAB = 2;
@@ -266,4 +266,30 @@ public class ELF {
 	public static final int DT_JMPREL = 23;
 	public static final int DT_LOPROC = 0x70000000;
 	public static final int DT_HIPROC = 0x7fffffff;
+	
+	public static final int PT_NULL = 0;
+    public static final int PT_LOAD = 1;
+    public static final int PT_DYNAMIC = 2;
+    public static final int PT_INTERP = 3;
+    public static final int PT_NOTE = 4;
+    public static final int PT_SHLIB = 5;
+    public static final int PT_PHDR = 6;
+    public static final int PT_LOPROC = 0x70000000;
+    public static final int PT_HIPROC = 0x7fffffff;
+	
+    // Symbol table entry bind
+    public static final int STB_LOCAL = 0;
+    public static final int STB_GLOBAL = 1;
+    public static final int STB_WEAK = 2;
+    public static final int STB_LOPROC = 13;
+    public static final int STB_HIPROC = 15;
+
+    // Symbol table entry type
+    public static final int STT_NOTYPE = 0;
+    public static final int STT_OBJECT = 1;
+    public static final int STT_FUNC = 2;
+    public static final int STT_SECTION = 3;
+    public static final int STT_FILE = 4;
+    public static final int STT_LOPROC = 13;
+    public static final int STT_HIPROC = 15;
 }
