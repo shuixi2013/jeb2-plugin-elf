@@ -8,18 +8,22 @@ public class ELFFile {
     private int headerNameStringTable;
 
 
-    private SectionHeaderTable sectionHeaderTable;
+    public int getHeaderNameStringTable() {
+		return headerNameStringTable;
+	}
+
+	private SectionHeaderTable sectionHeaderTable;
     private ProgramHeaderTable programHeaderTable;
     private List<Section> sections;
     public ELFFile(byte[] data) {
         header = new Header(data);
 
-        sectionHeaderTable = new SectionHeaderTable(data, header.getE_shoff(), header.getE_shentsize(), header.getE_shnum(), header.getE_shstrndx());
+        sectionHeaderTable = new SectionHeaderTable(data, header.getEShoff(), header.getEShentSize(), header.getEShnum(), header.getEShstrndx());
 
         sections = sectionHeaderTable.getSections();
 
 
-        programHeaderTable = new ProgramHeaderTable(data, header.getE_phoff(), header.getE_phentsize(), header.getE_phnum());
+        programHeaderTable = new ProgramHeaderTable(data, header.getEPhoff(), header.getEPhentSize(), header.getEPhnum());
 
     }
 
@@ -27,16 +31,10 @@ public class ELFFile {
         return header;
     }
 
-    /**
-     * @return the sectionHeaderTable
-     */
     public SectionHeaderTable getSectionHeaderTable() {
         return sectionHeaderTable;
     }
 
-    /**
-     * @return the sections
-     */
     public List<Section> getSections() {
         return sections;
     }

@@ -5,14 +5,14 @@ import java.util.List;
 
 
 public class NoteSection extends Section {
-    private int s_entsize;
+    private int entrySize;
     private List<NoteSectionEntry> entries = new ArrayList<>();
 
-    public NoteSection(byte[] data, int s_size, int s_offset, int s_entsize) {
-        super(data, s_size, s_offset);
+    public NoteSection(byte[] data, int size, int offset, int entrySize) {
+        super(data, size, offset);
 
-        for(int index=0; index < s_size / s_entsize; index++) {
-            entries.add(new NoteSectionEntry(data, s_entsize, s_offset + s_entsize * index));
+        for(int index=0; index < size / entrySize; index++) {
+            entries.add(new NoteSectionEntry(data, entrySize, offset + entrySize * index));
         }
     }
 

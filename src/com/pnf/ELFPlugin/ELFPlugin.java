@@ -1,5 +1,6 @@
-package com.pnf.ELF;
+package com.pnf.ELFPlugin;
 
+import com.pnf.ELF.ELF;
 import com.pnfsoftware.jeb.core.PluginInformation;
 import com.pnfsoftware.jeb.core.properties.IPropertyDefinitionManager;
 import com.pnfsoftware.jeb.core.properties.IPropertyManager;
@@ -10,12 +11,8 @@ import com.pnfsoftware.jeb.core.units.IUnitProcessor;
 import com.pnfsoftware.jeb.util.logging.GlobalLog;
 import com.pnfsoftware.jeb.util.logging.ILogger;
 
-
 public class ELFPlugin extends AbstractUnitIdentifier {
     private static final ILogger logger = GlobalLog.getLogger(ELFPlugin.class);
-    static {
-        System.out.println("ELFPlugin Loaded");
-    }
 
 
     public ELFPlugin() {
@@ -35,7 +32,7 @@ public class ELFPlugin extends AbstractUnitIdentifier {
 
     @Override
     public boolean identify(byte[] data, IUnit parent) {
-        return checkBytes(data, 0, (byte)0x7F, 'E', 'L', 'F');
+        return checkBytes(data, 0, (int)ELF.ElfMagic[0], (int)ELF.ElfMagic[1], (int)ELF.ElfMagic[2], (int)ELF.ElfMagic[3]);
     }
     @Override
     public IUnit prepare(String name, byte[] data, IUnitProcessor unitProcessor, IUnit parent) {
@@ -44,6 +41,7 @@ public class ELFPlugin extends AbstractUnitIdentifier {
         return unit;
     }
 
+    // Does not support saving yet
     @Override
     public IUnit reload(IBinaryFrames serializedData, IUnitProcessor unitProcessor, 
             IUnit parent) {

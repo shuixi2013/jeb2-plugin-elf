@@ -1,12 +1,11 @@
-package com.pnf.ELF;
+package com.pnf.ELFPlugin;
 
-import java.io.IOException;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.pnf.ELF.ELF;
+import com.pnf.ELF.ELFFile;
+import com.pnf.ELF.SectionHeader;
 import com.pnfsoftware.jeb.core.actions.InformationForActionExecution;
 import com.pnfsoftware.jeb.core.output.AbstractUnitRepresentation;
 import com.pnfsoftware.jeb.core.output.IInfiniDocument;
@@ -25,29 +24,29 @@ import com.pnfsoftware.jeb.util.logging.ILogger;
 public class ELFUnit extends AbstractBinaryUnit implements IInteractiveUnit {
     private static final ILogger logger = GlobalLog.getLogger(ELFUnit.class);
     private ELFFile elf;
+
     public ELFUnit(String name, byte[] data, IUnitProcessor unitProcessor, IUnit parent, IPropertyDefinitionManager pdm) {
         super("", data, "ELF_file", name, unitProcessor, parent, pdm);
     }
+
     public ELFUnit(IBinaryFrames serializedData, IUnitProcessor unitProcessor, IUnit parent, IPropertyDefinitionManager pdm) {
         super(serializedData, unitProcessor, parent, pdm);
     }
+
     @Override
     public boolean process() {
         elf = new ELFFile(data);
         for(SectionHeader section : elf.getSectionHeaderTable().getHeaders()) {
             switch(section.getType()) {
+                // Send any binary sections to be processed
                 case ELF.SHT_PROGBITS:
-                    unitProcessor.process(section.getName(), section.getSection().getBytes(), this);
+                    children.add(unitProcessor.process(section.getName(), section.getSection().getBytes(), this));
                     break;
             }
         }
         return false;
     }
 
-    @Override
-    public String getNotes() {
-        return "";
-    }
     @Override
     public IBinaryFrames serialize() {
         return null;
@@ -56,6 +55,12 @@ public class ELFUnit extends AbstractBinaryUnit implements IInteractiveUnit {
     public IUnitFormatter getFormatter() {
         List<SectionHeader> sectionHeaders = elf.getSectionHeaderTable().getHeaders();
         UnitFormatterAdapter formatter = new UnitFormatterAdapter();
+        formatter.addDocumentPresentation(new AbstractUnitRepresentation("Section Header Table", true) {
+            @Override
+            public IInfiniDocument getDocument() {
+                return new SectionHeaderTableDocument(elf.getSectionHeaderTable());
+            }
+        });
 
         for(SectionHeader section : sectionHeaders) {
             switch(section.getType()) {
@@ -67,23 +72,30 @@ public class ELFUnit extends AbstractBinaryUnit implements IInteractiveUnit {
                         }
                     });
                     break;
+                case ELF.SHT_HASH:
+                    formatter.addDocumentPresentation(new AbstractUnitRepresentation(section.getName(), false) {
+                        @Override
+                        public IInfiniDocument getDocument() {
+                            return new HashTableDocument(section);
+                        }
+                    });
+                    break;
+
+                case ELF.SHT_DYNSYM:
+                case ELF.SHT_SYMTAB:
+                    formatter.addDocumentPresentation(new AbstractUnitRepresentation(section.getName(), false) {
+                        @Override
+                        public IInfiniDocument getDocument() {
+                            return new SymbolTableDocument(section);
+                        }
+                    });
+                    break;
             }
         }
-        /*formatter.addDocumentPresentation(new AbstractUnitRepresentation("Tree view", true) {
-            @Override
-            public IInfiniDocument getDocument() {
-                return new TextFileTreeDocument(TextFileUnit.this);
-            }
-        });*/
-        /*formatter.addDocumentPresentation(new AbstractUnitRepresentation("Formatted Text", true) {
-            @Override
-            public IInfiniDocument getDocument() {
-                return new TextFileDocument(TextFileUnit.this);
-            }
-        });*/
         return formatter;
     }
 
+    // No actions available at the moment
     @Override
     public boolean executeAction(InformationForActionExecution info) {
         return false;

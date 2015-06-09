@@ -1,41 +1,37 @@
 package com.pnf.ELF;
 
 import java.io.ByteArrayInputStream;
+import java.util.Arrays;
 
 
 public class Section extends StreamReader {
 
-    protected int s_size;
-    protected int s_offset;
+    protected int size;
+    protected int offset;
+    protected StringTableSection nameTable;
     protected ByteArrayInputStream stream;
-    /**
-     * @param s_type
-     * @param s_size
-     * @param s_offset
-     * @param s_name
-     * @param s_name_s
-     * @param s_nameTable
-     */
-    public Section(byte[] data, int s_size, int s_offset) {
+    protected byte[] data;
+    
+    public Section(byte[] data, int size, int offset) {
         // Setup member variables and set stream to start of section
         stream = new ByteArrayInputStream(data);
-        stream.skip(s_offset);
-        this.s_size = s_size;
-        this.s_offset = s_offset;
+        stream.skip(offset);
+        this.size = size;
+        this.offset = offset;
+        this.data = data;
     }
 
     public byte[] getBytes() {
-        byte[] output = new byte[s_size];
-        stream.reset();
-        stream.skip(s_offset);
-        stream.read(output, 0, s_size);
-        return output;
+        return Arrays.copyOfRange(data, offset, offset + size);
     }
 
     public int getOffset() {
-        return s_offset;
+        return offset;
     }
     public int getSize() {
-        return s_size;
+        return size;
+    }
+    public void setNameTable(StringTableSection nameTable) {
+        this.nameTable = nameTable;
     }
 }

@@ -5,16 +5,34 @@ import java.util.List;
 
 public class SymbolTableSection extends Section {
 
-    private int sh_entsize;
+    private int entrySize;
     private List<SymbolTableEntry> entries = new ArrayList<>();
 
-    public SymbolTableSection(byte[] data, int sh_size, int sh_offset, int sh_entsize) {
-        super(data, sh_size, sh_offset);
+    private StringTableSection nameTable;
 
-        this.sh_entsize = sh_entsize;
+    public SymbolTableSection(byte[] data, int size, int offset, int entrySize, StringTableSection nameTable) {
+        super(data, size, offset);
+        this.entrySize = entrySize;
+        this.nameTable = nameTable;
+        for(int index=0; index < size / entrySize; index++) {
+            entries.add(new SymbolTableEntry(data, offset + index * entrySize));
+        }
     }
 
-    public String getString(int index) {
-        return getStringFromTable(stream, index);
+
+    public SymbolTableEntry getEntry(int index) {
+        return entries.get(index);
     }
+    public List<SymbolTableEntry> getEntries() {
+        return entries;
+    }
+
+    @Override
+    public void setNameTable(StringTableSection nameTable) {
+        super.setNameTable(nameTable);
+        for(SymbolTableEntry entry : entries) {
+            entry.setName(nameTable);
+        }
+    }
+
 }

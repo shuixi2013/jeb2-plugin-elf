@@ -6,35 +6,49 @@ import java.util.List;
 
 public class SectionHeaderTable extends StreamReader {
 
-    private short shentsize;
-    private int shoff;
-    private short shstrndx;
-    private short shnum;
+    private short entrySize;
+    private int offset;
+    private short nameTableIndex;
+    private short number;
 
     private List<SectionHeader> entries = new ArrayList<>();
 
 
-    public SectionHeaderTable(byte[] data, int shoff, short shentsize, short shnum, short shstrndx) {
+    public SectionHeaderTable(byte[] data, int offset, short entrySize, short number, short nameTableIndex) {
 
-        this.shoff = shoff;
-        this.shentsize = shentsize;
-        this.shnum = shnum;
-        this.shstrndx = shstrndx;
+        this.offset = offset;
+        this.entrySize = entrySize;
+        this.number = number;
+        this.nameTableIndex = nameTableIndex;
         ByteArrayInputStream stream = new ByteArrayInputStream(data);
 
-        stream.skip(shoff);
+        stream.skip(offset);
 
         stream.mark(0);
 
         // Get the string name table section information
-        stream.skip(shstrndx * shentsize);
+        stream.skip(nameTableIndex * entrySize);
         
-        NameSectionHeader names = new NameSectionHeader(data, shentsize, shoff + shstrndx * shentsize);
+        NameSectionHeader names = new NameSectionHeader(data, entrySize, offset + nameTableIndex * entrySize);
 
+        StringTableSection nameTable = null;
         SectionHeader header;
-        for(int sh_index=0; sh_index < shnum; sh_index++) {
-            header = new SectionHeader(data, shentsize, shoff + sh_index * shentsize, names);
+        // First pass to grab the name table and initialize sections
+        for(int sh_index=0; sh_index < number; sh_index++) {
+            header = new SectionHeader(data, entrySize, offset + sh_index * entrySize, names);
             entries.add(header);
+            if(header.getType() == ELF.SHT_STRTAB) {
+                if(header.getName().equals(".dynstr") || header.getName().equals(".strtab")) {
+                    nameTable = (StringTableSection)header.getSection();
+                }
+            }
+        }
+        // Second pass to set the name table of all sections
+        for(int index=0; index < entries.size(); index++) {
+            header = entries.get(index);
+            if(header.getType() == ELF.SHT_DYNSYM || header.getType() == ELF.SHT_SYMTAB) {
+                header.setNameTable(nameTable);
+            }
         }
     }
 
@@ -42,32 +56,22 @@ public class SectionHeaderTable extends StreamReader {
          return entries.get(index);
     }
 
-    /**
-     * @return the shentsize
-     */
-    public short getEntsize() {
-        return shentsize;
+    public short getEntrySize() {
+        return entrySize;
     }
 
-    /**
-     * @return the shoff
-     */
-    public int getOff() {
-        return shoff;
+
+    public int getOffset() {
+        return offset;
     }
 
-    /**
-     * @return the shstrndx
-     */
-    public short getStrndx() {
-        return shstrndx;
+    public short getNameTableIndex() {
+        return nameTableIndex;
     }
 
-    /**
-     * @return the shnum
-     */
-    public short getNum() {
-        return shnum;
+
+    public short getNumber() {
+        return number;
     }
 
     public StringTableSection getStringTable() {
@@ -86,9 +90,6 @@ public class SectionHeaderTable extends StreamReader {
         return output;
     }
 
-    /**
-     * @return the entries
-     */
     public List<SectionHeader> getHeaders() {
         return entries;
     }

@@ -5,30 +5,62 @@ import java.io.ByteArrayInputStream;
 
 public class RelocationSectionEntry extends StreamReader {
 
-    private int se_size;
-    private int se_offset;
+    private int size;
+    private int offset;
 
-    private int r_offset;
-    private int r_info;
-    private int r_addend;
+    private int entryOffset;
+    private int info;
+    private int addend;
 
-    private int r_sym;
-    private int r_type;
-    private boolean RELA;
+    private int symbol;
+    private int type;
+    public int getSize() {
+		return size;
+	}
+
+	public int getOffset() {
+		return offset;
+	}
+
+	public int getEntryOffset() {
+		return entryOffset;
+	}
+
+	public int getInfo() {
+		return info;
+	}
+
+	public int getAddend() {
+		return addend;
+	}
+
+	public int getSymbol() {
+		return symbol;
+	}
+
+	public int getType() {
+		return type;
+	}
+
+	public boolean isRELA() {
+		return RELA;
+	}
+
+	private boolean RELA;
 
     public RelocationSectionEntry(byte[] data, int se_size, int se_offset, boolean RELA) {
         ByteArrayInputStream stream = new ByteArrayInputStream(data);
         stream.skip(se_offset);
-        this.se_size = se_size;
-        this.se_offset = se_offset;
-        r_offset = readInt(stream);
-        r_info = readInt(stream);
+        this.size = se_size;
+        this.offset = se_offset;
+        entryOffset = readInt(stream);
+        info = readInt(stream);
         // Not always set
         if(RELA) {
-            r_addend = readInt(stream);
+            addend = readInt(stream);
         }
 
-        r_sym = r_info >> 8;
-        r_type = (char)r_info;
+        symbol = info >> 8;
+        type = (char)info;
     }
 }
