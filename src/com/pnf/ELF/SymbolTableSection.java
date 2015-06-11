@@ -5,6 +5,9 @@ import java.util.List;
 
 public class SymbolTableSection extends Section {
 
+	// Wraps the bytes of a Symbol Table
+	// Keeps a list of entries for the data
+	
     private int entrySize;
     private List<SymbolTableEntry> entries = new ArrayList<>();
 

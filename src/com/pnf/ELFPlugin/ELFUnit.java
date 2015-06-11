@@ -44,7 +44,8 @@ public class ELFUnit extends AbstractBinaryUnit implements IInteractiveUnit {
                     break;
             }
         }
-        return false;
+        processed = true;
+        return true;
     }
 
     @Override
@@ -80,6 +81,14 @@ public class ELFUnit extends AbstractBinaryUnit implements IInteractiveUnit {
                         }
                     });
                     break;
+                case ELF.SHT_NOTE:
+                    formatter.addDocumentPresentation(new AbstractUnitRepresentation(section.getName(), false) {
+                        @Override
+                        public IInfiniDocument getDocument() {
+                            return new NotesDocument(section);
+                        }
+                    });
+                    break;
 
                 case ELF.SHT_DYNSYM:
                 case ELF.SHT_SYMTAB:
@@ -108,6 +117,23 @@ public class ELFUnit extends AbstractBinaryUnit implements IInteractiveUnit {
 
     @Override
     public List<Integer> getItemActions(long id) {
+        return new ArrayList<>();
+    }
+    @Override
+    public long getItemAtAddress(String address) {
+        
+        return 1L;
+    }
+    @Override
+    public String getAddressOfItem(long id) {
+        return null;
+    }
+    @Override
+    public List<Integer> getGlobalActions() {
+        return new ArrayList<>();
+    }
+    @Override
+    public List<Integer> getAddressActions(String address) {
         return new ArrayList<>();
     }
 
