@@ -1,7 +1,7 @@
 package com.pnf.ELF;
 
 public class HashTableSection extends Section {
-
+	
     private int numBuckets;
     private int numChain;
     private int[] buckets;

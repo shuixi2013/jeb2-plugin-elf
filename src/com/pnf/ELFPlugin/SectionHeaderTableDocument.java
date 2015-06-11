@@ -40,10 +40,15 @@ public class SectionHeaderTableDocument extends JebEventSource implements ITable
                 cells.add(new Cell(""));
                 cells.add(new Cell(""));
             }
-            else {
+            else if(header.getSection() != null) {
                 cells.add(new Cell(String.format("%h", header.getAddress())));
                 cells.add(new Cell(String.format("%h", header.getSection().getOffset())));
                 cells.add(new Cell(String.format("%h", header.getSection().getSize())));
+            }
+            else {
+                cells.add(new Cell(""));
+                cells.add(new Cell(""));
+                cells.add(new Cell(""));
             }
             cells.add(new Cell("" + header.getFlags()));
             cells.add(new Cell("" + header.getLink()));

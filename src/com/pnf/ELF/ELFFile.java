@@ -3,6 +3,8 @@ package com.pnf.ELF;
 import java.util.List;
 
 public class ELFFile {
+	// Wrapper for ELF Files
+	
     private Header header;
 
     private int headerNameStringTable;

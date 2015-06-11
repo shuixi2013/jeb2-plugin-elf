@@ -11,8 +11,14 @@ public class NoteSection extends Section {
     public NoteSection(byte[] data, int size, int offset, int entrySize) {
         super(data, size, offset);
 
-        for(int index=0; index < size / entrySize; index++) {
-            entries.add(new NoteSectionEntry(data, entrySize, offset + entrySize * index));
+        int entryOffset = 0;
+        int nameSize;
+        int descSize;
+        NoteSectionEntry entry;
+        while(entryOffset < size) {
+            entry = new NoteSectionEntry(data, entryOffset + offset);
+            entries.add(entry);
+            entryOffset += entry.getSize();
         }
     }
 
