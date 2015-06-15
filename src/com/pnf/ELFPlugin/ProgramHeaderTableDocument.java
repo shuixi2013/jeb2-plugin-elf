@@ -3,8 +3,8 @@ package com.pnf.ELFPlugin;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.pnf.ELF.SectionHeader;
-import com.pnf.ELF.SectionHeaderTable;
+import com.pnf.ELF.ProgramHeader;
+import com.pnf.ELF.ProgramHeaderTable;
 import com.pnf.ELF.StringTableSection;
 import com.pnfsoftware.jeb.core.events.JebEventSource;
 import com.pnfsoftware.jeb.core.output.table.ITableDocument;
@@ -15,33 +15,32 @@ import com.pnfsoftware.jeb.core.output.table.impl.TableRow;
 import com.pnfsoftware.jeb.util.logging.GlobalLog;
 import com.pnfsoftware.jeb.util.logging.ILogger;
 
-public class SectionHeaderTableDocument extends JebEventSource implements ITableDocument {
+public class ProgramHeaderTableDocument extends JebEventSource implements ITableDocument {
     private static final ILogger logger = GlobalLog.getLogger(StringTableDocument.class);
 
-    SectionHeaderTable headerTable;
+    ProgramHeaderTable headerTable;
 
     List<TableRow> rows;
 
-    public SectionHeaderTableDocument(SectionHeaderTable headerTable) {
+    public ProgramHeaderTableDocument(ProgramHeaderTable headerTable) {
         this.headerTable = headerTable;
 
         rows = new ArrayList<>();
-        List<SectionHeader> headers = headerTable.getHeaders();
+        List<ProgramHeader> headers = headerTable.getHeaders();
         List<Cell> cells;
-        SectionHeader header;
+        ProgramHeader header;
         for(int index=0; index < headers.size(); index++) {
             cells = new ArrayList<>();
             header = headers.get(index);
             cells.add(new Cell("" + index));
-            cells.add(new Cell("" + header.getName()));
-            cells.add(new Cell("" + header.getType_s()));
-            cells.add(new Cell(String.format("%h", header.getAddress())));
-            cells.add(new Cell(String.format("%h", header.getOffset())));
-            cells.add(new Cell(String.format("%h", header.getSize())));
-            cells.add(new Cell("" + header.getFlags()));
-            cells.add(new Cell("" + header.getLink()));
-            cells.add(new Cell("" + header.getInfo()));
-            cells.add(new Cell("" + header.getAddressAlign()));
+            cells.add(new Cell(header.getTypeString()));
+            cells.add(new Cell(String.format("%x", header.getOffset())));
+            cells.add(new Cell(String.format("%x", header.getVAddr())));
+            cells.add(new Cell(String.format("%x", header.getPAddr())));
+            cells.add(new Cell(String.format("%x", header.getMemorySize())));
+            cells.add(new Cell(String.format("%x", header.getFileSize())));
+            cells.add(new Cell(String.format("%s", header.getFlagsString())));
+            cells.add(new Cell(String.format("%x", header.getAlign())));
             rows.add(new TableRow(cells));
         }
     }
@@ -50,15 +49,14 @@ public class SectionHeaderTableDocument extends JebEventSource implements ITable
     public List<String> getColumnLabels() {
         ArrayList<String> output = new ArrayList<>();
         output.add("Index");
-        output.add("Name");
         output.add("Type");
-        output.add("Address");
         output.add("Offset");
-        output.add("Size");
+        output.add("Virtual Address");
+        output.add("Physical Address");
+        output.add("Memory Size");
+        output.add("File Size");
         output.add("Flags");
-        output.add("Link");
-        output.add("Info");
-        output.add("Addr Align");
+        output.add("Align");
         return output;
     }
 

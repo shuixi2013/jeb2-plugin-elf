@@ -58,72 +58,46 @@ public class SectionHeader extends StreamReader {
         switch(s_type) {
             case ELF.SHT_NULL:
                 section = null;
-                s_type_s = "SHT_NULL";
-                break;
-            case ELF.SHT_PROGBITS:
-                s_type_s = "SHT_PROGBITS";
-                section = new Section(data, s_size, s_offset);
                 break;
             case ELF.SHT_SYMTAB:
                 section = new SymbolTableSection(data, s_size, s_offset, s_entsize, this.nameTable);
-                s_type_s = "SHT_SYMTAB";
                 break;
             case ELF.SHT_STRTAB:
-                s_type_s = "SHT_STRTAB";
                 section = new StringTableSection(data, s_size, s_offset);
                 break;
             case ELF.SHT_RELA:
-                s_type_s = "SHT_RELA";
                 section = new RelocationSection(data, s_size, s_offset, s_entsize, true);
                 break;
             case ELF.SHT_HASH:
-                s_type_s = "SHT_HASH";
                 section = new HashTableSection(data, s_size, s_offset);
-                break;
-            case ELF.SHT_DYNAMIC:
-                section = new Section(data, s_size, s_offset);
-                s_type_s = "SHT_DYNAMIC";
                 break;
             case ELF.SHT_NOTE:
                 section = new NoteSection(data, s_size, s_offset, s_entsize);
-                s_type_s = "SHT_NOTE";
                 break;
             case ELF.SHT_NOBITS:
                 section = null;
-                s_type_s = "SHT_NOBITS";
                 break;
             case ELF.SHT_REL:
-                s_type_s = "SHT_REL";
                 section = new RelocationSection(data, s_size, s_offset, s_entsize, false);
-                break;
-            case ELF.SHT_SHLIB:
-                section = new Section(data, s_size, s_offset);
-                s_type_s = "SHT_SHLIB";
                 break;
             case ELF.SHT_DYNSYM:
                 section = new SymbolTableSection(data, s_size, s_offset, s_entsize, this.nameTable);
                 s_type_s = "SHT_DYNSYM";
                 break;
+            case ELF.SHT_PROGBITS:
+            case ELF.SHT_DYNAMIC:
+            case ELF.SHT_SHLIB:
             case ELF.SHT_LOPROC:
-                section = new Section(data, s_size, s_offset);
-                s_type_s = "SHT_LOPROC";
-                break;
             case ELF.SHT_HIPROC:
-                section = new Section(data, s_size, s_offset);
-                s_type_s = "SHT_HIPROC";
-                break;
             case ELF.SHT_LOUSER:
-                section = new Section(data, s_size, s_offset);
-                s_type_s = "SHT_LOUSER";
-                break;
             case ELF.SHT_HIUSER:
                 section = new Section(data, s_size, s_offset);
-                s_type_s = "SHT_HIUSER";
                 break;
             default:
                 section = null;
                 s_type_s = "UNKNOWN";
         }
+        s_type_s = ELF.getSectionTypeString(s_type);
     }
 
     /**
@@ -146,6 +120,12 @@ public class SectionHeader extends StreamReader {
 
     public Section getSection() {
          return section;
+    }
+    public int getOffset() {
+        return s_offset;
+    }
+    public int getSize() {
+        return s_size;
     }
     
     public int getAddress() {

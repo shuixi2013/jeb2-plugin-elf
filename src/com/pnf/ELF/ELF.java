@@ -19,14 +19,70 @@ public class ELF {
     public static final int SHT_REL = 9;
     public static final int SHT_SHLIB = 10;
     public static final int SHT_DYNSYM = 11;
+    public static final int SHT_INIT_ARRAY = 14;
+    public static final int SHT_FINI_ARRAY = 15;
+    public static final int SHT_PREINIT_ARRAY = 16;
+    public static final int SHT_GROUP = 17;
+    public static final int SHT_SYMTAB_SHNDX = 18;
+    public static final int SHT_LOOS = 0x60000000;
+    public static final int SHT_HIOS = 0x6fffffff;
     public static final int SHT_LOPROC = 0x70000000;
     public static final int SHT_HIPROC = 0x7fffffff;
     public static final int SHT_LOUSER = 0x80000000;
     public static final int SHT_HIUSER = 0xffffffff;
 
+
+    public static String getSectionTypeString(int type) {
+        switch(type) {
+            case SHT_NULL:                  return "SHT_NULL";
+            case SHT_PROGBITS:              return "SHT_PROGBITS";
+            case SHT_SYMTAB:                return "SHT_SYMTAB";
+            case SHT_STRTAB:                return "SHT_STRTAB";
+            case SHT_RELA:                  return "SHT_RELA";
+            case SHT_HASH:                  return "SHT_HASH";
+            case SHT_DYNAMIC:               return "SHT_DYNAMIC";
+            case SHT_NOTE:                  return "SHT_NOTE";
+            case SHT_NOBITS:                return "SHT_NOBITS";
+            case SHT_REL:                   return "SHT_REL";
+            case SHT_SHLIB:                 return "SHT_SHLIB";
+            case SHT_DYNSYM:                return "SHT_DYNSYM";
+            case SHT_INIT_ARRAY:            return "SHT_INIT_ARRAY";
+            case SHT_FINI_ARRAY:            return "SHT_FINI_ARRAY";
+            case SHT_PREINIT_ARRAY:         return "SHT_PREINIT_ARRAY";
+            case SHT_GROUP:                 return "SHT_GROUP";
+            case SHT_SYMTAB_SHNDX:          return "SHT_SYMTAB_SHNDX";
+            case SHT_LOOS:                  return "SHT_LOOS";
+            case SHT_HIOS:                  return "SHT_HIOS";
+            case SHT_LOPROC:                return "SHT_LOPROC";
+            case SHT_HIPROC:                return "SHT_HIPROC";
+            case SHT_LOUSER:                return "SHT_LOUSER";
+            case SHT_HIUSER:                return "SHT_HIUSER";
+            default:                        break;
+        }
+        return "UNKNOWN";
+    }
+
+
+    // Arm specific types
+    public static final int SHT_ARM_EXIDX = 0x70000001;
+    public static final int SHT_ARM_PREEMPTMAP = 0x70000002;
+    public static final int SHT_ARM_ATTRIBUTES = 0x70000003;
+    public static final int SHT_ARM_DEBUGOVERLAY = 0x70000004;
+    public static final int SHT_ARM_OVERLAYSECTION = 0x70000005;
+
+
     public static final int SHF_WRITE = 1;
     public static final int SHF_ALLOC = 2;
     public static final int SHF_EXECINSTR = 4;
+    public static final int SHF_MERGE = 0x10;
+    public static final int SHF_STRINGS = 0x20;
+    public static final int SHF_INFO_LINK = 0x40;
+    public static final int SHF_LINK_ORDER = 0x80;
+    public static final int SHF_OS_NONCONFORMING = 0x100;
+    public static final int SHF_GROUP = 0x200;
+    public static final int SHF_TLS = 0x400;
+    public static final int SHF_COMPRESSED = 0x800;
+    public static final int SHF_MASKOS = 0x0ff00000;
     public static final int SHF_MASKPROC = 0xf0000000;
 
     public static byte[] ElfMagic = { (byte)0x7F, 'E', 'L', 'F' };
@@ -274,8 +330,48 @@ public class ELF {
     public static final int PT_NOTE = 4;
     public static final int PT_SHLIB = 5;
     public static final int PT_PHDR = 6;
+    public static final int PT_TLS = 7;
+    public static final int PT_LOOS = 0x60000000;
+    public static final int PT_HIOS = 0x6fffffff;
     public static final int PT_LOPROC = 0x70000000;
     public static final int PT_HIPROC = 0x7fffffff;
+    // GNU extensions
+    public static final int PT_GNU_EH_FRAME	= (PT_LOOS + 0x474e550);
+    public static final int PT_GNU_RELRO = (PT_LOOS + 0x474e552);
+    public static final int PT_GNU_STACK = PT_LOOS + 0x474e551;
+
+
+    public static String getSegmentType(int type) {
+        switch(type) {
+            case PT_NULL:                   return "PT_NULL";
+            case PT_LOAD:                   return "PT_LOAD";
+            case PT_DYNAMIC:                return "PT_DYNAMIC";
+            case PT_INTERP:                 return "PT_INTERP";
+            case PT_NOTE:                   return "PT_NOTE";
+            case PT_SHLIB:                  return "PT_SHLIB";
+            case PT_PHDR:                   return "PT_PHDR";
+            case PT_TLS:                    return "PT_TLS";
+            case PT_LOOS:                   return "PT_LOOS";
+            case PT_HIOS:                   return "PT_HIOS";
+            case PT_LOPROC:                 return "PT_LOPROC";
+            case PT_HIPROC:                 return "PT_HIPROC";
+            case PT_GNU_EH_FRAME:           return "PT_GNU_EH_FRAME";
+            case PT_GNU_RELRO:              return "PT_GNU_RELRO";
+            case PT_GNU_STACK:              return "PT_GNU_STACK";
+            default:
+                if ((type >= PT_LOPROC) && (type <= PT_HIPROC)) {
+                    return "Arch Specific";
+                }
+        }
+        return "UNKNOWN";
+    }
+
+
+    public static final int PF_X = 0x1;
+    public static final int PF_W = 0x2;
+    public static final int PF_R = 0x4;
+    public static final int PF_MASKOS = 0x0ff00000;
+    public static final int PF_MASKPROC = 0xf0000000;
 	
     // Symbol table entry bind
     public static final int STB_LOCAL = 0;

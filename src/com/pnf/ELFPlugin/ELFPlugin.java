@@ -19,6 +19,7 @@ public class ELFPlugin extends AbstractUnitIdentifier {
         super("ELF_file", 0);
     }
 
+
     @Override
     public PluginInformation getPluginInformation() {
         return new PluginInformation("ELF File Unit", "", "1.0", "PNF Software");

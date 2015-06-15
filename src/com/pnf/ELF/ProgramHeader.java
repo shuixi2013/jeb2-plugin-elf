@@ -6,54 +6,58 @@ public class ProgramHeader extends StreamReader {
 
     private int type;
     private String typeString;
-    public int getType() {
-		return type;
-	}
-
-	public String getTypeString() {
-		return typeString;
-	}
-
-	public int getOffset() {
-		return offset;
-	}
-
-	public int getVaddr() {
-		return vaddr;
-	}
-
-	public int getPaddr() {
-		return paddr;
-	}
-
-	public int getFileSize() {
-		return fileSize;
-	}
-
-	public int getMemorySize() {
-		return memorySize;
-	}
-
-	public int getFlags() {
-		return flags;
-	}
-
-	public int getAlign() {
-		return align;
-	}
-
-	public Section getSection() {
-		return section;
-	}
-
-	private int offset;
+    private int offset;
     private int vaddr;
     private int paddr;
     private int fileSize;
     private int memorySize;
     private int flags;
+    private String flagsString;
     private int align;
     private Section section;
+
+    public int getType() {
+        return type;
+    }
+
+    public String getTypeString() {
+        return typeString;
+    }
+
+    public int getOffset() {
+        return offset;
+    }
+
+    public int getVAddr() {
+        return vaddr;
+    }
+
+    public int getPAddr() {
+        return paddr;
+    }
+
+    public int getFileSize() {
+        return fileSize;
+    }
+
+    public int getMemorySize() {
+        return memorySize;
+    }
+
+    public int getFlags() {
+        return flags;
+    }
+    public String getFlagsString() {
+        return flagsString;
+    }
+
+    public int getAlign() {
+        return align;
+    }
+
+    public Section getSection() {
+        return section;
+    }
 
     public ProgramHeader(byte[] data, int sectionOffset) {
         ByteArrayInputStream stream = new ByteArrayInputStream(data);
@@ -65,6 +69,13 @@ public class ProgramHeader extends StreamReader {
         fileSize = readInt(stream);
         memorySize = readInt(stream);
         flags = readInt(stream);
+
+        flagsString = "";
+        flagsString = String.format("%c%c%c", 
+                (flags & ELF.PF_X) != 0 ? 'E' : ' ',
+                (flags & ELF.PF_W) != 0 ? 'W' : ' ',
+                (flags & ELF.PF_R) != 0 ? 'R' : ' ');
+
         align = readInt(stream);
 
         switch(type) {
@@ -96,6 +107,7 @@ public class ProgramHeader extends StreamReader {
                 typeString = "PT_HIPROC";
                 break;
             default:
+                logger.info("%x", type);
                 typeString = "UNKNOWN";
         }
     }
