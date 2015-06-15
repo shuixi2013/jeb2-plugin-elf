@@ -23,4 +23,7 @@ public class ProgramHeaderTable extends StreamReader {
 
     }
 
+    public List<ProgramHeader> getHeaders() {
+        return entries;
+    }
 }

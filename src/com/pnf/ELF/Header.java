@@ -6,7 +6,7 @@ public class Header extends StreamReader {
 
     private int start;
     private int end;
-    private int e_nident; // size of identification struct
+    private int identSize; // size of identification struct
     private byte eiMag0;
     private byte eiMag1;
     private byte eiMag2;
@@ -205,51 +205,51 @@ public class Header extends StreamReader {
     }
 
 
-    public int getNident() {
-        return e_nident;
+    public int getIdentSize() {
+        return identSize;
     }
 
 
-    public byte getEiClass() {
+    public byte getEIClass() {
         return eiClass;
     }
 
-    public String getEiClassString() {
+    public String getClassString() {
         return eiClassString;
     }
 
 
-    public byte getEiData() {
+    public byte getData() {
         return eiData;
     }
 
 
-    public String getEiDataString() {
+    public String getDataString() {
         return eiDataString;
     }
 
 
-    public byte getEiVersion() {
+    public byte getEIVersion() {
         return eiVersion;
     }
 
-    public String getEiVersionString() {
+    public String getEIVersionString() {
         return eiVersionString;
     }
 
-    public short getEType() {
+    public short getType() {
         return eType;
     }
 
-    public String getETypeString() {
+    public String getTypeString() {
         return eTypeString;
     }
 
-    public short getEMachine() {
+    public short getMachine() {
         return eMachine;
     }
 
-    public String getEMachineString() {
+    public String getMachineString() {
         return eMachineString;
     }
 
@@ -262,46 +262,46 @@ public class Header extends StreamReader {
         return eVersionString;
     }
 
-    public int getEEntry() {
+    public int getEntryPoint() {
         return eEntry;
     }
 
 
-    public int getEPhoff() {
+    public int getPHOffset() {
         return ePhoff;
     }
 
-    public int getEShoff() {
+    public int getShoff() {
         return eShoff;
     }
 
 
-    public int getEFlags() {
+    public int getFlags() {
         return eFlags;
     }
 
-    public short getEEhsize() {
+    public short getHeaderSize() {
         return eEhsize;
     }
 
-    public short getEPhentSize() {
+    public short getPHEntrySize() {
         return ePhentSize;
     }
 
 
-    public short getEPhnum() {
+    public short getPHNumber() {
         return ePhnum;
     }
 
-    public short getEShentSize() {
+    public short getSHEntrySize() {
         return eShentSize;
     }
 
-    public short getEShnum() {
+    public short getSHNumber() {
         return eShnum;
     }
 
-    public short getEShstrndx() {
+    public short getSHStringIndex() {
         return eShstrndx;
     }
 

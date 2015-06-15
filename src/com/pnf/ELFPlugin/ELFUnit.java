@@ -32,7 +32,10 @@ public class ELFUnit extends AbstractBinaryUnit implements IInteractiveUnit {
     public ELFUnit(IBinaryFrames serializedData, IUnitProcessor unitProcessor, IUnit parent, IPropertyDefinitionManager pdm) {
         super(serializedData, unitProcessor, parent, pdm);
     }
-
+    @Override
+    public String getDescription() {
+        return "Entry Point:" + Integer.toHexString(elf.getHeader().getEntryPoint());
+    }
     @Override
     public boolean process() {
         elf = new ELFFile(data);
@@ -62,7 +65,12 @@ public class ELFUnit extends AbstractBinaryUnit implements IInteractiveUnit {
                 return new SectionHeaderTableDocument(elf.getSectionHeaderTable());
             }
         });
-
+        formatter.addDocumentPresentation(new AbstractUnitRepresentation("Program Header Table", false) {
+            @Override
+            public IInfiniDocument getDocument() {
+                return new ProgramHeaderTableDocument(elf.getProgramHeaderTable());
+            }
+        });
         for(SectionHeader section : sectionHeaders) {
             switch(section.getType()) {
                 case ELF.SHT_STRTAB:
@@ -101,6 +109,7 @@ public class ELFUnit extends AbstractBinaryUnit implements IInteractiveUnit {
                     break;
             }
         }
+
         return formatter;
     }
 
