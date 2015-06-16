@@ -1,11 +1,14 @@
 package com.pnf.ELFPlugin;
 
+import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.pnf.ELF.ELF;
 import com.pnf.ELF.ELFFile;
 import com.pnf.ELF.SectionHeader;
+import com.pnf.MIPSPlugin.MIPSPlugin;
+import com.pnf.MIPSPlugin.MIPSUnit;
 import com.pnfsoftware.jeb.core.actions.InformationForActionExecution;
 import com.pnfsoftware.jeb.core.output.AbstractUnitRepresentation;
 import com.pnfsoftware.jeb.core.output.IInfiniDocument;
@@ -16,10 +19,10 @@ import com.pnfsoftware.jeb.core.units.AbstractBinaryUnit;
 import com.pnfsoftware.jeb.core.units.IBinaryFrames;
 import com.pnfsoftware.jeb.core.units.IInteractiveUnit;
 import com.pnfsoftware.jeb.core.units.IUnit;
+import com.pnfsoftware.jeb.core.units.IUnitIdentifier;
 import com.pnfsoftware.jeb.core.units.IUnitProcessor;
 import com.pnfsoftware.jeb.util.logging.GlobalLog;
 import com.pnfsoftware.jeb.util.logging.ILogger;
-
 
 public class ELFUnit extends AbstractBinaryUnit implements IInteractiveUnit {
     private static final ILogger logger = GlobalLog.getLogger(ELFUnit.class);
@@ -39,14 +42,44 @@ public class ELFUnit extends AbstractBinaryUnit implements IInteractiveUnit {
     @Override
     public boolean process() {
         elf = new ELFFile(data);
-        for(SectionHeader section : elf.getSectionHeaderTable().getHeaders()) {
+        /*for(SectionHeader section : elf.getSectionHeaderTable().getHeaders()) {
             switch(section.getType()) {
                 // Send any binary sections to be processed
                 case ELF.SHT_PROGBITS:
                     children.add(unitProcessor.process(section.getName(), section.getSection().getBytes(), this));
                     break;
             }
+        }*/
+        String type = "";
+        /*switch(elf.getArch()) {
+            case ELF.EM_MIPS:
+                //children.add(unitProcessor.process("mips_child", elf.getMem(), this, "MIPS"));
+                children.add(new MIPSUnit("Mips", elf.getMem(), unitProcessor, this, pdm));
+                break;
+            default:
+                processed = false;
+                return false;
+        }*/
+        /*IUnit target = null;
+        String targetType;
+        switch(elf.getArch()) {
+            case ELF.EM_MIPS:
+                targetType = "MIPS";
+                break;
+            default:
+                processed = false;
+                return false;
         }
+        for(IUnitIdentifier ident: unitProcessor.getUnitIdentifiers()) {
+            if(targetType.equals(ident.getFormatType())) {
+                target = ((MIPSPlugin)ident).prepare(name, elf.getMem(), unitProcessor, parent, elf.getHeader().getEntryPoint(), ByteOrder.LITTLE_ENDIAN);
+                break;
+            }
+        }*/
+        // logger.info("%b checking", target instanceof MIPSUnit);
+        // MIPSUnit check = (MIPSUnit)target;
+        // check.init(elf.getHeader().getEntryPoint(), ByteOrder.LITTLE_ENDIAN);
+        // children.add(target);
         processed = true;
         return true;
     }
