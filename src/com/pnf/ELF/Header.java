@@ -1,6 +1,7 @@
 package com.pnf.ELF;
 
 import java.io.ByteArrayInputStream;
+import java.nio.ByteOrder;
 
 public class Header extends StreamReader {
 
@@ -76,9 +77,21 @@ public class Header extends StreamReader {
             throw new IllegalArgumentException("Magic number does not match");
 
         eiClass = (byte)stream.read();
+        if(eiClass == 0)
+            throw new AssertionError("Invalid class");
         eiClassString = ELF.getClassString(eiClass);
 
         eiData = (byte)stream.read();
+        switch(eiData) {
+            case ELF.ELFDATANONE:
+                throw new AssertionError("Invalid data format");
+            case ELF.ELFDATA2LSB:
+                endianness = ByteOrder.LITTLE_ENDIAN;
+                break;
+            case ELF.ELFDATA2MSB:
+                endianness = ByteOrder.BIG_ENDIAN;
+                break;
+        }
         eiDataString = ELF.getDataString(eiData);
 
         eiVersion = (byte)stream.read();

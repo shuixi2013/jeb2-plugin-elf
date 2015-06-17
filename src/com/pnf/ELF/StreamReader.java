@@ -11,6 +11,10 @@ import com.pnfsoftware.jeb.util.logging.ILogger;
 public class StreamReader {
 
     protected static final ILogger logger = GlobalLog.getLogger(StreamReader.class);
+
+    // Use a probable default endianness
+    protected static ByteOrder endianness = ByteOrder.LITTLE_ENDIAN;
+
     protected static int readInt(ByteArrayInputStream stream, int offset) {
         stream.mark(0);
         stream.skip(offset);
@@ -28,12 +32,12 @@ public class StreamReader {
     protected static int readInt(ByteArrayInputStream stream) {
         byte[] temp = new byte[4];
         stream.read(temp, 0, 4);
-        return ByteBuffer.wrap(temp).order(ByteOrder.LITTLE_ENDIAN).getInt();
+        return ByteBuffer.wrap(temp).order(endianness).getInt();
     }
     protected static short readShort(ByteArrayInputStream stream) {
         byte[] temp = new byte[2];
         stream.read(temp, 0, 2);
-        return ByteBuffer.wrap(temp).order(ByteOrder.LITTLE_ENDIAN).getShort();
+        return ByteBuffer.wrap(temp).order(endianness).getShort();
     }
     protected static String readString(ByteArrayInputStream stream) {
         String output = "";
