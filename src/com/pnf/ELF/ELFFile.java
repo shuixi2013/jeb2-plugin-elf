@@ -59,6 +59,7 @@ public class ELFFile {
                 System.arraycopy(data, header.getOffset(), memoryImage, header.getAddress()-minAddr, header.getSize());
             }
         }
+        sectionHeaderTable.doRelocations(memoryImage, minAddr);
     }
 
     private void applyRelocations() {

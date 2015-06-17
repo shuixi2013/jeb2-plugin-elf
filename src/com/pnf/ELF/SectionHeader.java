@@ -34,7 +34,6 @@ public class SectionHeader extends StreamReader {
         ByteArrayInputStream stream = new ByteArrayInputStream(data);
         stream.skip(offset);
         s_name = readInt(stream);
-        logger.info("New section: %s", name);
         s_type = readInt(stream);
         s_name_s = name;
 

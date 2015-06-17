@@ -42,24 +42,6 @@ public class ELFUnit extends AbstractBinaryUnit implements IInteractiveUnit {
     @Override
     public boolean process() {
         elf = new ELFFile(data);
-        /*for(SectionHeader section : elf.getSectionHeaderTable().getHeaders()) {
-            switch(section.getType()) {
-                // Send any binary sections to be processed
-                case ELF.SHT_PROGBITS:
-                    children.add(unitProcessor.process(section.getName(), section.getSection().getBytes(), this));
-                    break;
-            }
-        }*/
-        String type = "";
-        /*switch(elf.getArch()) {
-            case ELF.EM_MIPS:
-                //children.add(unitProcessor.process("mips_child", elf.getMem(), this, "MIPS"));
-                children.add(new MIPSUnit("Mips", elf.getMem(), unitProcessor, this, pdm));
-                break;
-            default:
-                processed = false;
-                return false;
-        }*/
         /*IUnit target = null;
         String targetType;
         switch(elf.getArch()) {
@@ -72,14 +54,18 @@ public class ELFUnit extends AbstractBinaryUnit implements IInteractiveUnit {
         }
         for(IUnitIdentifier ident: unitProcessor.getUnitIdentifiers()) {
             if(targetType.equals(ident.getFormatType())) {
-                target = ((MIPSPlugin)ident).prepare(name, elf.getMem(), unitProcessor, parent, elf.getHeader().getEntryPoint(), ByteOrder.LITTLE_ENDIAN);
+                target = ident.prepare(name, elf.getMem(), unitProcessor, parent);
                 break;
             }
-        }*/
-        // logger.info("%b checking", target instanceof MIPSUnit);
-        // MIPSUnit check = (MIPSUnit)target;
-        // check.init(elf.getHeader().getEntryPoint(), ByteOrder.LITTLE_ENDIAN);
-        // children.add(target);
+        }
+        logger.info("%b checking", target instanceof MIPSUnit);
+        MIPSUnit check = (MIPSUnit)target;
+        check.init(elf.getHeader().getEntryPoint(), ByteOrder.LITTLE_ENDIAN);
+        children.add(target);*/
+        MIPSUnit mips = new MIPSUnit("MIPS", elf.getMem(), unitProcessor, this, pdm);
+        mips.init(elf.getHeader().getEntryPoint(), ByteOrder.LITTLE_ENDIAN);
+        mips.process();
+        children.add(mips);
         processed = true;
         return true;
     }

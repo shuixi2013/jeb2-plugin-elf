@@ -20,4 +20,8 @@ public class RelocationSection extends Section {
             entries.add(new RelocationSectionEntry(data, entrySize, s_offset + entrySize * index, RELA));
         }
     }
+
+    public List<RelocationSectionEntry> getEntries() {
+        return entries;
+    }
 }

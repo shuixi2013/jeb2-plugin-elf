@@ -441,4 +441,36 @@ public class ELF {
     public static final int STT_FILE = 4;
     public static final int STT_LOPROC = 13;
     public static final int STT_HIPROC = 15;
+
+    public static enum R_SYMBOL {
+        LOCAL,
+        EXTERNAL
+    };
+
+
+    public static final int R_MIPS_NONE         = 0;
+    public static final int R_MIPS_REL_32       = 3;
+
+    public static int relocate(int id, int A, int ABitCount, int AHL, int P, int S, int G, int GP, int GP0, int EA, int L, R_SYMBOL sym) {
+        int DTP_OFFSET = 0x8000;
+        int TP_OFFSET = 0x8000;
+
+        switch(id) {
+            case R_MIPS_NONE:
+                return 0;
+            case R_MIPS_REL_32:
+                return S + A - EA;
+        }
+        throw new RuntimeException(String.format("Relocation type %d not recognized. Please add it", id));
+    }
+
+    // Sign extension function
+    public static int SE(int operand, int opSize) {
+        return operand | (0xFFFFFFFF << opSize);
+    }
+    // Get the high 16 bits
+    public static int high(int x) {
+        return (x - (short)x) >> 16;
+    }
+
 }
