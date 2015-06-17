@@ -94,17 +94,40 @@ public class ELF {
     public static final byte ELFCLASS32 = 1;
     public static final byte ELFCLASS64 = 2;
 
+    public static String getClassString(int id) {
+        switch(id) {
+            case ELF.ELFCLASSNONE:      return "ELFCLASSNONE";
+            case ELF.ELFCLASS32:        return "ELFCLASS32";
+            case ELF.ELFCLASS64:        return "ELFCLASS64";
+            default:                    return "UNKNOWN";
+        }
+    }
+
     // Elf data constants
     public static final byte ELFDATANONE = 0;
     // 2's complement little endian
     public static final byte ELFDATA2LSB = 1;
     // 2's complement big endian
     public static final byte ELFDATA2MSB = 2;
-
+    public static String getDataString(int data) {
+        switch(data) {
+            case ELF.ELFDATANONE:       return "ELFDATANONE";
+            case ELF.ELFDATA2LSB:       return "ELFDATA2LSB";
+            case ELF.ELFDATA2MSB:       return "ELFDATA2MSB";
+            default:                    return "UNKNOWN";
+        }
+    }
     // Elf version constants
     public static final int EV_NONE = 0;
     public static final int EV_CURRENT = 1;
 
+    public static String getVersionString(int version) {
+        switch(version) {
+            case EV_NONE:               return "EV_NONE";
+            case EV_CURRENT:            return "EV_CURRENT";
+            default:                    return "UNKNOWN";
+        }
+    }
 
     // Elf type constants
     public static final short ET_NONE = 0;
@@ -114,6 +137,21 @@ public class ELF {
     public static final short ET_CORE = 4;
     public static final short ET_LOPROC = (short)0xff00;
     public static final short ET_HIPROC = (short)0xffff;
+
+
+    public static String getTypeString(int type) {
+        switch(type) {
+            case ET_NONE:           return "ET_NONE";
+            case ET_REL:            return "ET_REL";
+            case ET_EXEC:           return "ET_EXEC";
+            case ET_DYN:            return "ET_DYN";
+            case ET_CORE:           return "ET_CORE";
+            case ET_LOPROC:         return "ET_LOPROC";
+            case ET_HIPROC:         return "ET_HIPROC";
+            default:                return "UNKNOWN";
+        }
+    }
+
 
     // OS Application Binary Interfaces
     public static final int ELFOSABI_NONE = 0;          // UNIX System V ABI
@@ -295,6 +333,21 @@ public class ELF {
     public static final int EM_78KOR         = 199; // Renesas 78KOR family
     public static final int EM_56800EX       = 200; // Freescale 56800EX Digital Signal Controller (DSCc)
 
+    public static String getMachineString(int machine) {
+        switch(machine) {
+            case EM_NONE:       return "NONE";
+            case EM_M32:        return "M32";
+            case EM_SPARC:      return "SPARC";
+            case EM_386:        return "386";
+            case EM_68K:        return "68K";
+            case EM_88K:        return "88K";
+            case EM_860:        return "860";
+            case EM_MIPS:       return "MIPS";
+            case EM_ARM:        return "ARM";
+            default:            return "UNKNOWN";
+        }
+    }
+
     // Dynamic array tags
 	public static final int DT_NULL = 0;
 	public static final int DT_NEEDED = 1;
@@ -388,4 +441,36 @@ public class ELF {
     public static final int STT_FILE = 4;
     public static final int STT_LOPROC = 13;
     public static final int STT_HIPROC = 15;
+
+    public static enum R_SYMBOL {
+        LOCAL,
+        EXTERNAL
+    };
+
+
+    public static final int R_MIPS_NONE         = 0;
+    public static final int R_MIPS_REL_32       = 3;
+
+    public static int relocate(int id, int A, int ABitCount, int AHL, int P, int S, int G, int GP, int GP0, int EA, int L, R_SYMBOL sym) {
+        int DTP_OFFSET = 0x8000;
+        int TP_OFFSET = 0x8000;
+
+        switch(id) {
+            case R_MIPS_NONE:
+                return 0;
+            case R_MIPS_REL_32:
+                return S + A - EA;
+        }
+        throw new RuntimeException(String.format("Relocation type %d not recognized. Please add it", id));
+    }
+
+    // Sign extension function
+    public static int SE(int operand, int opSize) {
+        return operand | (0xFFFFFFFF << opSize);
+    }
+    // Get the high 16 bits
+    public static int high(int x) {
+        return (x - (short)x) >> 16;
+    }
+
 }

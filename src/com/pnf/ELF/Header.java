@@ -1,6 +1,7 @@
 package com.pnf.ELF;
 
 import java.io.ByteArrayInputStream;
+import java.nio.ByteOrder;
 
 public class Header extends StreamReader {
 
@@ -71,119 +72,44 @@ public class Header extends StreamReader {
         eiMag1 = (byte)stream.read();
         eiMag2 = (byte)stream.read();
         eiMag3 = (byte)stream.read();
+
         if(!checkBytes(new byte[] {eiMag0, eiMag1, eiMag2, eiMag3}, 0, ELF.ElfMagic))
             throw new IllegalArgumentException("Magic number does not match");
+
         eiClass = (byte)stream.read();
-        switch(eiClass) {
-            case ELF.ELFCLASSNONE:
-                eiClassString = "ELFCLASSNONE";
-                break;
-            case ELF.ELFCLASS32:
-                eiClassString = "ELFCLASS32";
-                break;
-            case ELF.ELFCLASS64:
-                eiClassString = "ELFCLASS64";
-                break;
-            default:
-                eiClassString = "UNKNOWN";
-        }
+        if(eiClass == 0)
+            throw new AssertionError("Invalid class");
+        eiClassString = ELF.getClassString(eiClass);
+
         eiData = (byte)stream.read();
         switch(eiData) {
             case ELF.ELFDATANONE:
-                eiDataString = "ELFDATANONE";
-                break;
+                throw new AssertionError("Invalid data format");
             case ELF.ELFDATA2LSB:
-                eiDataString = "ELFDATA2LSB";
+                endianness = ByteOrder.LITTLE_ENDIAN;
                 break;
             case ELF.ELFDATA2MSB:
-                eiDataString = "ELFDATA2MSB";
+                endianness = ByteOrder.BIG_ENDIAN;
                 break;
-            default:
-                eiDataString = "UNKNOWN";
         }
+        eiDataString = ELF.getDataString(eiData);
+
         eiVersion = (byte)stream.read();
-        switch(eiVersion) {
-            case ELF.EV_NONE:
-                eiVersionString = "EV_NONE";
-                break;
-            case ELF.EV_CURRENT:
-                eiVersionString = "EV_CURRENT";
-                break;
-            default:
-                eiVersionString = "UNKNOWN";
-        }
+        eiVersionString = ELF.getVersionString(0);
+
         eiOsabi = (byte)stream.read();
         eiAbiversion = (byte)stream.read();
+
         stream.skip(7);
         /******* Done Ident Struct ******/
 
         /******* Read Header ******/
         eType = readShort(stream);
-        switch(eType) {
-            case ELF.ET_NONE:
-                eTypeString = "ET_NONE";
-                break;
-            case ELF.ET_REL:
-                eTypeString = "ET_REL";
-                break;
-            case ELF.ET_EXEC:
-                eTypeString = "ET_EXEC";
-                break;
-            case ELF.ET_DYN:
-                eTypeString = "ET_DYN";
-                break;
-            case ELF.ET_CORE:
-                eTypeString = "ET_CORE";
-                break;
-            case ELF.ET_LOPROC:
-                eTypeString = "ET_LOPROC";
-                break;
-            case ELF.ET_HIPROC:
-                eTypeString = "ET_HIPROC";
-                break;
-            default:
-                eTypeString = "UNKNOWN";
-        }
+        eTypeString = ELF.getTypeString(eType);
         eMachine = readShort(stream);
-        switch(eMachine) {
-            case ELF.EM_NONE: 
-                eMachineString = "EM_NONE";
-                break;
-            case ELF.EM_M32:
-                eMachineString = "EM_M32";
-                break;
-            case ELF.EM_SPARC:
-                eMachineString = "EM_SPARC";
-                break;
-            case ELF.EM_386:
-                eMachineString = "EM_386";
-                break;
-            case ELF.EM_68K:
-                eMachineString = "EM_68K";
-                break;
-            case ELF.EM_88K:
-                eMachineString = "EM_88K";
-                break;
-            case ELF.EM_860:
-                eMachineString = "EM_860";
-                break;
-            case ELF.EM_MIPS:
-                eMachineString = "EM_MIPS";
-                break;
-            default:
-                eMachineString = "UNKNOWN";
-        }
+        eMachineString = ELF.getMachineString(eMachine);
         eVersion = readInt(stream);
-        switch(eVersion) {
-            case ELF.EV_NONE:
-                eVersionString = "EV_NONE";
-                break;
-            case ELF.EV_CURRENT:
-                eVersionString = "EV_CURRENT";
-                break;
-            default:
-                eVersionString = "UNKNOWN";
-        }
+        eVersionString = ELF.getVersionString(eVersion);
         eEntry = readInt(stream);
         ePhoff = readInt(stream);
         eShoff = readInt(stream);

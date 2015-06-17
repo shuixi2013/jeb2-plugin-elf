@@ -107,7 +107,6 @@ public class ProgramHeader extends StreamReader {
                 typeString = "PT_HIPROC";
                 break;
             default:
-                logger.info("%x", type);
                 typeString = "UNKNOWN";
         }
     }

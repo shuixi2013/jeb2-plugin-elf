@@ -13,6 +13,8 @@ public class SectionHeaderTable extends StreamReader {
 
     private List<SectionHeader> entries = new ArrayList<>();
 
+    private List<SectionHeader> relocations = new ArrayList<>();
+
 
     public SectionHeaderTable(byte[] data, int offset, short entrySize, short number, short nameTableIndex) {
 
@@ -37,6 +39,9 @@ public class SectionHeaderTable extends StreamReader {
         for(int sh_index=0; sh_index < number; sh_index++) {
             header = new SectionHeader(data, entrySize, offset + sh_index * entrySize, names);
             entries.add(header);
+            if(header.getType() == ELF.SHT_RELA || header.getType() == ELF.SHT_REL) {
+                relocations.add(header);
+            }
             if(header.getType() == ELF.SHT_STRTAB) {
                 if(header.getName().equals(".dynstr") || header.getName().equals(".strtab")) {
                     nameTable = (StringTableSection)header.getSection();
@@ -48,6 +53,30 @@ public class SectionHeaderTable extends StreamReader {
             header = entries.get(index);
             if(header.getType() == ELF.SHT_DYNSYM || header.getType() == ELF.SHT_SYMTAB) {
                 header.setNameTable(nameTable);
+            }
+        }
+    }
+    public void doRelocations(byte[] mem, int addrShift) {
+
+        // Third pass to apply relocations
+        RelocationSection section;
+        SectionHeader symbolTable = null;
+        offset = 0;
+        int addend;
+        char type;
+        for(SectionHeader sym : entries) {
+            if(sym.getType() == ELF.SHT_DYNSYM || sym.getType() == ELF.SHT_SYMTAB) {
+                symbolTable = sym;
+                break;
+            }
+        }
+        if(symbolTable == null) 
+            throw new RuntimeException("No symbol table for relocations");
+        for(SectionHeader reloc : relocations) {
+            section = (RelocationSection)(reloc.getSection());
+            for(RelocationSectionEntry entry : section.getEntries()) {
+                entry.setSymbolTable(symbolTable);
+                entry.doRelocation(mem, addrShift);
             }
         }
     }

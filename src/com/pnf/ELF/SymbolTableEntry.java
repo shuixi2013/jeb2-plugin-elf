@@ -107,7 +107,13 @@ public class SymbolTableEntry extends StreamReader {
     public String getBindString() {
         return bindString;
     }
+    public int getBind() {
+        return bind;
+    }
 
+    public int getType() {
+        return type;
+    }
     public String getTypeString() {
         return typeString;
     }

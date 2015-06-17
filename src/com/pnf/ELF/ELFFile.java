@@ -37,8 +37,6 @@ public class ELFFile {
         int addr;
         int minAddr=Integer.MAX_VALUE;
         for(SectionHeader header : sectionHeaderTable.getHeaders()) {
-            if(header.getType() == ELF.SHT_NOBITS)
-                continue;
             addr = header.getAddress();
             if(addr == 0) {
                 continue;
@@ -51,30 +49,30 @@ public class ELFFile {
                 minAddr = addr;
             }
         }
-        logger.info("total size: %x", maxAddr + maxAddrSize - minAddr);
-        logger.info("min addr: %x", minAddr);
 
         memoryImage = new byte[maxAddr + maxAddrSize - minAddr];
 
 
         for(SectionHeader header : sectionHeaderTable.getHeaders()) {
-            if(header.getAddress() == 0)
-                continue;
-            if(header.getType() == ELF.SHT_NOBITS)
-                continue;
-            System.arraycopy(data, header.getOffset(), memoryImage, header.getAddress()-minAddr, header.getSize());
+            // Address of 0 indicates it is not in the memory image
+            if(header.getAddress() != 0) {
+                System.arraycopy(data, header.getOffset(), memoryImage, header.getAddress()-minAddr, header.getSize());
+            }
+        }
+        sectionHeaderTable.doRelocations(memoryImage, minAddr);
+    }
 
+    private void applyRelocations() {
+        for(SectionHeader header : sectionHeaderTable.getHeaders()) {
+            if(header.getType() == ELF.SHT_RELA || header.getType() == ELF.SHT_REL) {
+
+            }
         }
-        try {
-            FileOutputStream fileOuputStream = 
-                new FileOutputStream("/Users/adrian/git/ELFPlugin/testfiles/output.bin"); 
-            fileOuputStream.write(memoryImage);
-            fileOuputStream.close();
-            logger.info("Written!");
-        }
-        catch(Exception e) {
-            e.printStackTrace();
-        }
+
+    }
+
+    public byte[] getMem() {
+        return memoryImage;
     }
 
     public Header getHeader() {
@@ -93,7 +91,7 @@ public class ELFFile {
         return sections;
     }
 
-    public String getArchitecture() {
-        return header.getMachineString();
+    public int getArch() {
+        return header.getMachine();
     }
 }
