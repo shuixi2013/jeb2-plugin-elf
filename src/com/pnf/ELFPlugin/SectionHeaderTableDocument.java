@@ -38,7 +38,7 @@ public class SectionHeaderTableDocument extends JebEventSource implements ITable
             cells.add(new Cell(String.format("%h", header.getAddress())));
             cells.add(new Cell(String.format("%h", header.getOffset())));
             cells.add(new Cell(String.format("%h", header.getSize())));
-            cells.add(new Cell("" + header.getFlags()));
+            cells.add(new Cell("" + header.getFlagsString()));
             cells.add(new Cell("" + header.getLink()));
             cells.add(new Cell("" + header.getInfo()));
             cells.add(new Cell("" + header.getAddressAlign()));

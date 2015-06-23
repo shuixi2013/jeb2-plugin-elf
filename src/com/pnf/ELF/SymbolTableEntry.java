@@ -29,51 +29,10 @@ public class SymbolTableEntry extends StreamReader {
         other = stream.read();
         sectionHeaderIndex = readShort(stream);
         bind = info >> 4;
-        switch(bind) {
-            case ELF.STB_LOCAL:
-                bindString = "STB_LOCAL";
-                break;
-            case ELF.STB_GLOBAL:
-                bindString = "STB_GLOBAL";
-                break;
-            case ELF.STB_WEAK:
-                bindString = "STB_WEAK";
-                break;
-            case ELF.STB_LOPROC:
-                bindString = "STB_LOPROC";
-                break;
-            case ELF.STB_HIPROC:
-                bindString = "STB_HIPROC";
-                break;
-            default:
-                bindString = "UNKNOWN";
-        }
+        bindString = ELF.getSTB(bind);
+
         type = info & 0xf;
-        switch(type) {
-            case ELF.STT_NOTYPE:
-                typeString = "STT_NOTYPE";
-                break;
-            case ELF.STT_OBJECT:
-                typeString = "STT_OBJECT";
-                break;
-            case ELF.STT_FUNC:
-                typeString = "STT_FUNC";
-                break;
-            case ELF.STT_SECTION:
-                typeString = "STT_SECTION";
-                break;
-            case ELF.STT_FILE:
-                typeString = "STT_FILE";
-                break;
-            case ELF.STT_LOPROC:
-                typeString = "STT_LOPROC";
-                break;
-            case ELF.STT_HIPROC:
-                typeString = "STT_HIPROC";
-                break;
-            default:
-                typeString = "UNKNOWN";
-        }
+        typeString = ELF.getSTT(type);
     } 
 
     public void setName(StringTableSection nameTable) {

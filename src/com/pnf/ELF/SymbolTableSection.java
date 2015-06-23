@@ -1,6 +1,7 @@
 package com.pnf.ELF;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class SymbolTableSection extends Section {
@@ -36,6 +37,15 @@ public class SymbolTableSection extends Section {
         for(SymbolTableEntry entry : entries) {
             entry.setName(nameTable);
         }
+    }
+
+    public HashMap<Integer, String> toHashMap() {
+        HashMap<Integer, String> output = new HashMap<>();
+        for(SymbolTableEntry entry : entries) {
+            if(entry.getType() == ELF.STT_FUNC)
+                output.put(entry.getValue(), entry.getName());
+        }
+        return output;
     }
 
 }
