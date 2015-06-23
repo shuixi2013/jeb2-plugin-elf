@@ -67,6 +67,9 @@ public class SectionHeader extends StreamReader {
             case ELF.SHT_RELA:
                 section = new RelocationSection(data, s_size, s_offset, s_entsize, true);
                 break;
+            case ELF.SHT_REL:
+                section = new RelocationSection(data, s_size, s_offset, s_entsize, false);
+                break;
             case ELF.SHT_HASH:
                 section = new HashTableSection(data, s_size, s_offset);
                 break;
@@ -76,15 +79,13 @@ public class SectionHeader extends StreamReader {
             case ELF.SHT_NOBITS:
                 section = null;
                 break;
-            case ELF.SHT_REL:
-                section = new RelocationSection(data, s_size, s_offset, s_entsize, false);
-                break;
             case ELF.SHT_DYNSYM:
                 section = new SymbolTableSection(data, s_size, s_offset, s_entsize, this.nameTable);
-                s_type_s = "SHT_DYNSYM";
+                break;
+            case ELF.SHT_DYNAMIC:
+                section = new DynamicSection(data, s_size, s_offset, s_entsize);
                 break;
             case ELF.SHT_PROGBITS:
-            case ELF.SHT_DYNAMIC:
             case ELF.SHT_SHLIB:
             case ELF.SHT_LOPROC:
             case ELF.SHT_HIPROC:
@@ -93,8 +94,7 @@ public class SectionHeader extends StreamReader {
                 section = new Section(data, s_size, s_offset);
                 break;
             default:
-                section = null;
-                s_type_s = "UNKNOWN";
+                section = new Section(data, s_size, s_offset);
         }
         s_type_s = ELF.getSectionTypeString(s_type);
     }
@@ -140,7 +140,11 @@ public class SectionHeader extends StreamReader {
         return s_addralign;
     }
 
-    public String getFlags() {
+    public int getFlags() {
+        return s_flags;
+    }
+
+    public String getFlagsString() {
         String output = "";
         for(String flag : s_flags_s) {
             //output += flag.replace("SHF_", "").charAt(0);

@@ -33,7 +33,11 @@ public class ELFPlugin extends AbstractUnitIdentifier {
 
     @Override
     public boolean identify(byte[] data, IUnit parent) {
-        return checkBytes(data, 0, (int)ELF.ElfMagic[0], (int)ELF.ElfMagic[1], (int)ELF.ElfMagic[2], (int)ELF.ElfMagic[3]);
+        return 
+            checkBytes(data, 0, (int)ELF.ElfMagic[0], (int)ELF.ElfMagic[1], (int)ELF.ElfMagic[2], (int)ELF.ElfMagic[3]) &&
+            // Ensure a 32 bit elf file
+            checkBytes(data, 4, (byte)0x1)
+            ;
     }
     @Override
     public IUnit prepare(String name, byte[] data, IUnitProcessor unitProcessor, IUnit parent) {

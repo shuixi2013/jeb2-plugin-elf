@@ -78,37 +78,7 @@ public class ProgramHeader extends StreamReader {
 
         align = readInt(stream);
 
-        switch(type) {
-            case ELF.PT_NULL:
-                typeString = "PT_NULL";
-                break;
-            case ELF.PT_LOAD:
-                typeString = "PT_LOAD";
-                break;
-            case ELF.PT_DYNAMIC:
-                typeString = "PT_DYNAMIC";
-                break;
-            case ELF.PT_INTERP:
-                typeString = "PT_INTERP";
-                break;
-            case ELF.PT_NOTE:
-                typeString = "PT_NOTE";
-                break;
-            case ELF.PT_SHLIB:
-                typeString = "PT_SHLIB";
-                break;
-            case ELF.PT_PHDR:
-                typeString = "PT_PHDR";
-                break;
-            case ELF.PT_LOPROC:
-                typeString = "PT_LOPROC";
-                break;
-            case ELF.PT_HIPROC:
-                typeString = "PT_HIPROC";
-                break;
-            default:
-                typeString = "UNKNOWN";
-        }
+        typeString = ELF.getSegmentType(type);
     }
 
 }

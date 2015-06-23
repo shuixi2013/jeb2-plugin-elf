@@ -42,41 +42,34 @@ public class SectionHeaderTable extends StreamReader {
             if(header.getType() == ELF.SHT_RELA || header.getType() == ELF.SHT_REL) {
                 relocations.add(header);
             }
-            if(header.getType() == ELF.SHT_STRTAB) {
-                if(header.getName().equals(".dynstr") || header.getName().equals(".strtab")) {
-                    nameTable = (StringTableSection)header.getSection();
-                }
-            }
         }
-        // Second pass to set the name table of all sections
+        // Second pass to set the name table of all sections and link sections
         for(int index=0; index < entries.size(); index++) {
             header = entries.get(index);
             if(header.getType() == ELF.SHT_DYNSYM || header.getType() == ELF.SHT_SYMTAB) {
+                int strtabIndex = header.getLink();
+                nameTable = (StringTableSection)(entries.get(strtabIndex).getSection());
                 header.setNameTable(nameTable);
+            }
+            if(header.getType() == ELF.SHT_REL || header.getType() == ELF.SHT_RELA) {
+                ((RelocationSection)header.getSection()).setSymbolTable(entries.get(header.getLink()));
+            }
+            if(header.getType() == ELF.SHT_DYNAMIC) {
+                ((DynamicSection)header.getSection()).setStringTable(entries.get(header.getLink()));
             }
         }
     }
-    public void doRelocations(byte[] mem, int addrShift) {
+    public void doRelocations(byte[] mem) {
 
         // Third pass to apply relocations
         RelocationSection section;
-        SectionHeader symbolTable = null;
         offset = 0;
         int addend;
         char type;
-        for(SectionHeader sym : entries) {
-            if(sym.getType() == ELF.SHT_DYNSYM || sym.getType() == ELF.SHT_SYMTAB) {
-                symbolTable = sym;
-                break;
-            }
-        }
-        if(symbolTable == null) 
-            throw new RuntimeException("No symbol table for relocations");
         for(SectionHeader reloc : relocations) {
             section = (RelocationSection)(reloc.getSection());
             for(RelocationSectionEntry entry : section.getEntries()) {
-                entry.setSymbolTable(symbolTable);
-                entry.doRelocation(mem, addrShift);
+                entry.doRelocation(mem);
             }
         }
     }

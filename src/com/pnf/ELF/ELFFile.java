@@ -14,7 +14,7 @@ public class ELFFile {
 
     private int headerNameStringTable;
 
-    public byte[] memoryImage;
+    public byte[] image;
 
     public int getHeaderNameStringTable() {
 		return headerNameStringTable;
@@ -50,30 +50,19 @@ public class ELFFile {
             }
         }
 
-        memoryImage = new byte[maxAddr + maxAddrSize - minAddr];
+        image = new byte[maxAddr + maxAddrSize];
 
 
         for(SectionHeader header : sectionHeaderTable.getHeaders()) {
             // Address of 0 indicates it is not in the memory image
             if(header.getAddress() != 0) {
-                System.arraycopy(data, header.getOffset(), memoryImage, header.getAddress()-minAddr, header.getSize());
+                System.arraycopy(data, header.getOffset(), image, header.getAddress(), header.getSize());
             }
         }
-        sectionHeaderTable.doRelocations(memoryImage, minAddr);
+        sectionHeaderTable.doRelocations(image);
     }
 
-    private void applyRelocations() {
-        for(SectionHeader header : sectionHeaderTable.getHeaders()) {
-            if(header.getType() == ELF.SHT_RELA || header.getType() == ELF.SHT_REL) {
 
-            }
-        }
-
-    }
-
-    public byte[] getMem() {
-        return memoryImage;
-    }
 
     public Header getHeader() {
         return header;
@@ -93,5 +82,40 @@ public class ELFFile {
 
     public int getArch() {
         return header.getMachine();
+    }
+    public boolean isLittleEndian() {
+        return header.getEIClass() == ELF.ELFDATA2LSB;
+    }
+    public long getEntryPoint() {
+        return header.getEntryPoint();
+    }
+    public byte[] getImage() {
+        return image;
+    }
+    public long getImageSize() {
+        return image.length;
+    }
+    public long getImageBase() {
+        // Depends on page size
+        return 0;
+    }
+    public int getWordSize() {
+        switch(header.getData()) {
+            case ELF.ELFCLASS32:
+                return 32;
+            case ELF.ELFCLASS64:
+                return 64;
+            default:
+                // Means we don't know
+                // Need to ask the user
+                return -1;
+        }
+    }
+    public int getFlags() {
+        return header.getFlags();
+    }
+    public int getType() {
+        return header.getType();
+
     }
 }
