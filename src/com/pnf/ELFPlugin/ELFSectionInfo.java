@@ -2,7 +2,7 @@ package com.pnf.ELFPlugin;
 
 import com.pnf.ELF.ELF;
 import com.pnf.ELF.SectionHeader;
-import com.pnfsoftware.jeb.core.units.codeloader.ISegmentInformation;
+import com.pnfsoftware.jeb.core.units.codeobject.ISegmentInformation;
 
 public class ELFSectionInfo implements ISegmentInformation {
 

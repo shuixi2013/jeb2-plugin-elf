@@ -7,6 +7,7 @@ import com.pnf.ELF.DynamicSection;
 import com.pnf.ELF.DynamicSectionEntry;
 import com.pnf.ELF.SectionHeader;
 import com.pnfsoftware.jeb.core.events.JebEventSource;
+import com.pnfsoftware.jeb.core.output.table.ICellCoordinates;
 import com.pnfsoftware.jeb.core.output.table.ITableDocument;
 import com.pnfsoftware.jeb.core.output.table.ITableDocumentPart;
 import com.pnfsoftware.jeb.core.output.table.impl.Cell;
@@ -60,5 +61,19 @@ public class DynamicSectionDocument extends JebEventSource implements ITableDocu
     }
 
 
+
+    @Override
+    public ICellCoordinates addressToCoordinates(String address) {
+        return null;
+    }
+
+    @Override
+    public String coordinatesToAddress(ICellCoordinates coordinates) {
+        return null;
+    }
+
+    @Override
+    public void dispose() { 
+    }
 
 }

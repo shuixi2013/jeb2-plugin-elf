@@ -2,9 +2,9 @@ package com.pnf.ELFPlugin;
 
 import com.pnf.ELF.ELF;
 import com.pnf.ELF.ELFFile;
-import com.pnfsoftware.jeb.core.units.codeloader.ILoaderInformation;
-import com.pnfsoftware.jeb.core.units.codeloader.ProcessorType;
-import com.pnfsoftware.jeb.core.units.codeloader.SubsystemType;
+import com.pnfsoftware.jeb.core.units.codeobject.ILoaderInformation;
+import com.pnfsoftware.jeb.core.units.codeobject.ProcessorType;
+import com.pnfsoftware.jeb.core.units.codeobject.SubsystemType;
 
 
 public class ELFLoaderInformation implements ILoaderInformation {

@@ -6,6 +6,7 @@ import java.util.List;
 import com.pnf.ELF.SectionHeader;
 import com.pnf.ELF.StringTableSection;
 import com.pnfsoftware.jeb.core.events.JebEventSource;
+import com.pnfsoftware.jeb.core.output.table.ICellCoordinates;
 import com.pnfsoftware.jeb.core.output.table.ITableDocument;
 import com.pnfsoftware.jeb.core.output.table.ITableDocumentPart;
 import com.pnfsoftware.jeb.core.output.table.impl.Cell;
@@ -53,4 +54,20 @@ public class StringTableDocument extends JebEventSource implements ITableDocumen
     public ITableDocumentPart getTablePart(int start, int count) {
         return new TableDocumentPart(start, rows.subList(start, start+count));
     }
+
+
+    @Override
+    public ICellCoordinates addressToCoordinates(String address) {
+        return null;
+    }
+
+    @Override
+    public String coordinatesToAddress(ICellCoordinates coordinates) {
+        return null;
+    }
+
+    @Override
+    public void dispose() {
+    }
+
 }

@@ -55,7 +55,7 @@ public class ELFFile {
 
         for(SectionHeader header : sectionHeaderTable.getHeaders()) {
             // Address of 0 indicates it is not in the memory image
-            if(header.getAddress() != 0) {
+            if(header.getAddress() != 0 && header.getType() != ELF.SHT_NOBITS) {
                 System.arraycopy(data, header.getOffset(), image, header.getAddress(), header.getSize());
             }
         }

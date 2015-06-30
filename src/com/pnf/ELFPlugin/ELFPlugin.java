@@ -2,6 +2,7 @@ package com.pnf.ELFPlugin;
 
 import com.pnf.ELF.ELF;
 import com.pnfsoftware.jeb.core.PluginInformation;
+import com.pnfsoftware.jeb.core.input.IInput;
 import com.pnfsoftware.jeb.core.properties.IPropertyDefinitionManager;
 import com.pnfsoftware.jeb.core.properties.IPropertyManager;
 import com.pnfsoftware.jeb.core.units.AbstractUnitIdentifier;
@@ -32,16 +33,16 @@ public class ELFPlugin extends AbstractUnitIdentifier {
     
 
     @Override
-    public boolean identify(byte[] data, IUnit parent) {
+    public boolean canIdentify(IInput input, IUnit parent) {
         return 
-            checkBytes(data, 0, (int)ELF.ElfMagic[0], (int)ELF.ElfMagic[1], (int)ELF.ElfMagic[2], (int)ELF.ElfMagic[3]) &&
+            checkBytes(input, 0, (int)ELF.ElfMagic[0], (int)ELF.ElfMagic[1], (int)ELF.ElfMagic[2], (int)ELF.ElfMagic[3]) &&
             // Ensure a 32 bit elf file
-            checkBytes(data, 4, (byte)0x1)
+            checkBytes(input, 4, (byte)0x1)
             ;
     }
     @Override
-    public IUnit prepare(String name, byte[] data, IUnitProcessor unitProcessor, IUnit parent) {
-        ELFUnit unit = new ELFUnit(name, data, unitProcessor, parent, pdm);
+    public IUnit prepare(String name, IInput input, IUnitProcessor unitProcessor, IUnit parent) {
+        ELFUnit unit = new ELFUnit(name, input, unitProcessor, parent, pdm);
         unit.process();
         return unit;
     }

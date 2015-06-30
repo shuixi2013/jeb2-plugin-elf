@@ -11,6 +11,7 @@ import com.pnfsoftware.jeb.core.output.table.ITableDocumentPart;
 import com.pnfsoftware.jeb.core.output.table.impl.Cell;
 import com.pnfsoftware.jeb.core.output.table.impl.TableDocumentPart;
 import com.pnfsoftware.jeb.core.output.table.impl.TableRow;
+import com.pnfsoftware.jeb.core.output.table.ICellCoordinates;
 
 public class HashTableDocument extends JebEventSource implements ITableDocument {
 
@@ -59,6 +60,18 @@ public class HashTableDocument extends JebEventSource implements ITableDocument 
         return new TableDocumentPart(start, rows.subList(start, start+count));
     }
 
+    @Override
+    public ICellCoordinates addressToCoordinates(String address) {
+        return null;
+    }
 
+    @Override
+    public String coordinatesToAddress(ICellCoordinates coordinates) {
+        return null;
+    }
+
+    @Override
+    public void dispose() {
+    }
 
 }

@@ -29,8 +29,10 @@ public class NotesDocument extends JebEventSource implements ITextDocument {
 
         anchors.add(new Anchor(0, 0));
         for(NoteSectionEntry entry : ((NoteSection)(section.getSection())).getEntries()) {
-            for(String line : entry.toString().split("\n")) {
-                lines.add(new Line(line));
+            for(String line1 : entry.toString().split("\n")) {
+                for(String line2 : line1.split("\r")) {
+                    lines.add(new Line(line2));
+                }
             }
         }
     }
@@ -43,18 +45,18 @@ public class NotesDocument extends JebEventSource implements ITextDocument {
         return null;
     }
 
-    public int getAnchorCount() {
+    public long getAnchorCount() {
         return anchors.size();
     }
 
-    public ITextDocumentPart getDocumentPart(int anchorId, int linesAfter) {
+    public ITextDocumentPart getDocumentPart(long anchorId, int linesAfter) {
         return getDocumentPart(anchorId, linesAfter, 0);
     }
-    public ITextDocumentPart getDocumentPart(int anchorId, int linesAfter, int linesBefore) {
-        if(linesAfter + anchorId > lines.size())
-            linesAfter = lines.size();
-        if(linesBefore + anchorId < 0)
-            linesBefore = 0;
-        return new TextDocumentPart(lines.subList(anchorId, anchorId + linesAfter), anchors);
+    public ITextDocumentPart getDocumentPart(long anchorId, int linesAfter, int linesBefore) {
+        return new TextDocumentPart(lines, anchors);
+    }
+
+    @Override
+    public void dispose() {
     }
 }
