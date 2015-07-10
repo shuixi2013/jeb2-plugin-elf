@@ -1,8 +1,9 @@
 package com.pnf.ELF;
 
-import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.List;
 
+import com.pnfsoftware.jeb.core.units.IUnitNotification;
 import com.pnfsoftware.jeb.util.logging.GlobalLog;
 import com.pnfsoftware.jeb.util.logging.ILogger;
 
@@ -15,22 +16,30 @@ public class ELFFile {
     private int headerNameStringTable;
 
     public byte[] image;
+    private long baseAddr;
+
+    private List<IUnitNotification> notifications;
 
     public int getHeaderNameStringTable() {
 		return headerNameStringTable;
 	}
 
+    public List<IUnitNotification> getNotifications() {
+        return notifications;
+    }
+
 	private SectionHeaderTable sectionHeaderTable;
     private ProgramHeaderTable programHeaderTable;
     private List<Section> sections;
     public ELFFile(byte[] data) {
+        notifications = new ArrayList<>();
         header = new Header(data);
 
-        sectionHeaderTable = new SectionHeaderTable(data, header.getShoff(), header.getSHEntrySize(), header.getSHNumber(), header.getSHStringIndex());
+        sectionHeaderTable = new SectionHeaderTable(data, header.getShoff(), header.getSHEntrySize(), header.getSHNumber(), header.getSHStringIndex(), notifications);
 
         sections = sectionHeaderTable.getSections();
 
-        programHeaderTable = new ProgramHeaderTable(data, header.getPHOffset(), header.getPHEntrySize(), header.getPHNumber());
+        programHeaderTable = new ProgramHeaderTable(data, header.getPHOffset(), header.getPHEntrySize(), header.getPHNumber(), notifications);
 
         int maxAddr=0;
         int maxAddrSize=0;
@@ -49,6 +58,7 @@ public class ELFFile {
                 minAddr = addr;
             }
         }
+        baseAddr = minAddr;
 
         image = new byte[maxAddr + maxAddrSize];
 
@@ -97,7 +107,7 @@ public class ELFFile {
     }
     public long getImageBase() {
         // Depends on page size
-        return 0;
+        return baseAddr;
     }
     public int getWordSize() {
         switch(header.getData()) {

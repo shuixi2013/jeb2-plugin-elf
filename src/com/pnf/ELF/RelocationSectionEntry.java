@@ -76,11 +76,15 @@ public class RelocationSectionEntry extends StreamReader {
         symTabEntry = ((SymbolTableSection)(symbolTable.getSection())).getEntry(symbolTableIndex);
     }
     public void doRelocation(byte[] mem) {
-        int A;
+        /*int A;
         if(RELA) {
             A = addend;
         }
         else {
+            logger.info("%d", mem.length);
+            if(entryOffset >= mem.length) {
+
+            }
             A = mem[entryOffset];
         }
 
@@ -105,7 +109,7 @@ public class RelocationSectionEntry extends StreamReader {
                     System.arraycopy(newBytes, 0, mem, entryOffset, 4);
                 }
                 return;
-        }
+        }*/
     }
     public String getSymbolName() {
         return symTabEntry.getName();

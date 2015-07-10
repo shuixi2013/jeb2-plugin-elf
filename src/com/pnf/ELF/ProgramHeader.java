@@ -1,6 +1,11 @@
 package com.pnf.ELF;
 
 import java.io.ByteArrayInputStream;
+import java.util.List;
+
+import com.pnfsoftware.jeb.core.units.IUnitNotification;
+import com.pnfsoftware.jeb.core.units.NotificationType;
+import com.pnfsoftware.jeb.core.units.UnitNotification;
 
 public class ProgramHeader extends StreamReader {
 
@@ -59,7 +64,7 @@ public class ProgramHeader extends StreamReader {
         return section;
     }
 
-    public ProgramHeader(byte[] data, int sectionOffset) {
+    public ProgramHeader(byte[] data, int sectionOffset, List<IUnitNotification> notifications) {
         ByteArrayInputStream stream = new ByteArrayInputStream(data);
         stream.skip(sectionOffset);
         type = readInt(stream);
@@ -79,6 +84,9 @@ public class ProgramHeader extends StreamReader {
         align = readInt(stream);
 
         typeString = ELF.getSegmentType(type);
-    }
 
+        if(type == ELF.PT_GNU_STACK && (flags & ELF.PF_X) != 0) {
+            notifications.add(new UnitNotification(NotificationType.AREA_OF_INTEREST, "Stack is executable"));
+        }
+    }
 }

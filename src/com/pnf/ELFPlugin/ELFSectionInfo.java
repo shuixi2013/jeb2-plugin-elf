@@ -1,14 +1,14 @@
 package com.pnf.ELFPlugin;
 
 import com.pnf.ELF.ELF;
+import com.pnf.ELF.ProgramHeader;
 import com.pnf.ELF.SectionHeader;
 import com.pnfsoftware.jeb.core.units.codeobject.ISegmentInformation;
+import com.pnfsoftware.jeb.util.logging.GlobalLog;
+import com.pnfsoftware.jeb.util.logging.ILogger;
 
 public class ELFSectionInfo implements ISegmentInformation {
-
-    public static int FLAG_READ;
-    public static int FLAG_EXECTUTE;
-    public static int FLAG_WRITE;
+    private static final ILogger logger = GlobalLog.getLogger(ELFSectionInfo.class);
 
     private String name;
     private int flags;
@@ -19,7 +19,10 @@ public class ELFSectionInfo implements ISegmentInformation {
 
     public ELFSectionInfo(SectionHeader elfsection) {
         name = elfsection.getName();
-        flags = elfsection.getFlags();
+        int elfFlags = elfsection.getFlags();
+        this.flags = ((elfFlags & ELF.PF_X) != 0 ? FLAG_EXECUTE : 0) |
+                     ((elfFlags & ELF.PF_R) != 0 ? FLAG_READ : 0) |
+                     ((elfFlags & ELF.PF_W) != 0 ? FLAG_WRITE : 0);
         fileOffset = elfsection.getOffset();
         memOffset = elfsection.getAddress();
         if(elfsection.getType() == ELF.SHT_NOBITS) {
@@ -31,18 +34,20 @@ public class ELFSectionInfo implements ISegmentInformation {
             memSize = elfsection.getSize();
         }
     }
-
-    public ELFSectionInfo(String name, int flags, long fileOffset, long memOffset, long fileSize, long memSize) {
-        this.name = name;
-        this.flags = flags;
-        this.fileOffset = fileOffset;
-        this.memOffset = memOffset;
-        this.fileSize = fileSize;
-        this.memSize = memSize;
+    public ELFSectionInfo(ProgramHeader elfsection) {
+        name = null;
+        int elfFlags = elfsection.getFlags();
+        this.flags = ((elfFlags & ELF.PF_X) != 0 ? FLAG_EXECUTE : 0) |
+                     ((elfFlags & ELF.PF_R) != 0 ? FLAG_READ : 0) |
+                     ((elfFlags & ELF.PF_W) != 0 ? FLAG_WRITE : 0);
+        fileOffset = elfsection.getOffset();
+        memOffset = elfsection.getVAddr();
+        fileSize = elfsection.getFileSize();
+        memSize = elfsection.getMemorySize();
     }
 
     public int getFlags() {
-        return FLAG_READ << 2 + FLAG_WRITE << 1 + FLAG_EXECUTE;
+        return flags;
     }
     public String getName() {
         return name;

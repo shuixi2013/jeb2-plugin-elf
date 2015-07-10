@@ -1,12 +1,12 @@
 package com.pnf.ELFPlugin;
 
 import com.pnf.ELF.ELF;
+import com.pnfsoftware.jeb.core.IUnitCreator;
 import com.pnfsoftware.jeb.core.PluginInformation;
 import com.pnfsoftware.jeb.core.input.IInput;
 import com.pnfsoftware.jeb.core.properties.IPropertyDefinitionManager;
 import com.pnfsoftware.jeb.core.properties.IPropertyManager;
 import com.pnfsoftware.jeb.core.units.AbstractUnitIdentifier;
-import com.pnfsoftware.jeb.core.units.IBinaryFrames;
 import com.pnfsoftware.jeb.core.units.IUnit;
 import com.pnfsoftware.jeb.core.units.IUnitProcessor;
 import com.pnfsoftware.jeb.util.logging.GlobalLog;
@@ -17,7 +17,7 @@ public class ELFPlugin extends AbstractUnitIdentifier {
 
 
     public ELFPlugin() {
-        super("ELF_file", 0);
+        super("ELF", 0);
     }
 
 
@@ -33,7 +33,7 @@ public class ELFPlugin extends AbstractUnitIdentifier {
     
 
     @Override
-    public boolean canIdentify(IInput input, IUnit parent) {
+    public boolean canIdentify(IInput input, IUnitCreator parent) {
         return 
             checkBytes(input, 0, (int)ELF.ElfMagic[0], (int)ELF.ElfMagic[1], (int)ELF.ElfMagic[2], (int)ELF.ElfMagic[3]) &&
             // Ensure a 32 bit elf file
@@ -41,16 +41,10 @@ public class ELFPlugin extends AbstractUnitIdentifier {
             ;
     }
     @Override
-    public IUnit prepare(String name, IInput input, IUnitProcessor unitProcessor, IUnit parent) {
+    public IUnit prepare(String name, IInput input, IUnitProcessor unitProcessor, IUnitCreator parent) {
         ELFUnit unit = new ELFUnit(name, input, unitProcessor, parent, pdm);
         unit.process();
         return unit;
     }
 
-    // Does not support saving yet
-    @Override
-    public IUnit reload(IBinaryFrames serializedData, IUnitProcessor unitProcessor, 
-            IUnit parent) {
-        return null;
-    }
 }
