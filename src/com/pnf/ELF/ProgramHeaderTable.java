@@ -4,6 +4,8 @@ import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.pnfsoftware.jeb.core.units.IUnitNotification;
+
 
 public class ProgramHeaderTable extends StreamReader {
 
@@ -11,13 +13,13 @@ public class ProgramHeaderTable extends StreamReader {
     private int entrySize;
     private int number;
     private List<ProgramHeader> entries = new ArrayList<>();
-    public ProgramHeaderTable(byte[] data, int offset, int entrySize, int number) {
+    public ProgramHeaderTable(byte[] data, int offset, int entrySize, int number, List<IUnitNotification> notifications) {
 
         ByteArrayInputStream stream = new ByteArrayInputStream(data);
         stream.skip(offset);
 
         for(int index=0; index < number; index++) {
-             entries.add(new ProgramHeader(data, offset + entrySize * index));
+             entries.add(new ProgramHeader(data, offset + entrySize * index, notifications));
         }
 
 

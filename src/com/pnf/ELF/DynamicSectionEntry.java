@@ -125,8 +125,11 @@ public class DynamicSectionEntry extends StreamReader {
             case ELF.DT_NEEDED:
             case ELF.DT_SONAME:
             case ELF.DT_RPATH:
-                valString = ((StringTableSection)stringTable.getSection()).getString(val);
-                break;
+                if(stringTable.getSection() instanceof StringTableSection) {
+                    valString = ((StringTableSection)stringTable.getSection()).getString(val);
+                    break;
+                }
+                // Otherwise fall through to default
             default:
                 valString = Integer.toHexString(un);
         }

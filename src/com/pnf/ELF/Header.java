@@ -1,6 +1,7 @@
 package com.pnf.ELF;
 
 import java.io.ByteArrayInputStream;
+import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 public class Header extends StreamReader {
@@ -229,6 +230,29 @@ public class Header extends StreamReader {
 
     public short getSHStringIndex() {
         return eShstrndx;
+    }
+    public int getMagic() {
+        return ByteBuffer.allocate(4).put(eiMag0).put(eiMag1).put(eiMag2).put(eiMag3).getInt(0);
+    }
+    public String getMagicString() {
+        StringBuilder magic = new StringBuilder();
+        magic.append(String.format("%x ", eiMag0));
+        magic.append(String.format("%x ", eiMag1));
+        magic.append(String.format("%x ", eiMag2));
+        magic.append(String.format("%x", eiMag3));
+        return magic.toString();
+    }
+    public String getVersionString() {
+        return ELF.getVersionString(eiVersion);
+    }
+    public int getVersion() {
+        return eVersion;
+    }
+    public String getOSABIString() {
+        return ELF.getOSABIString(eiOsabi);
+    }
+    public int getABIVersion() {
+        return eiAbiversion;
     }
 
     @Override

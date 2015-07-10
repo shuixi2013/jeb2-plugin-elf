@@ -9,6 +9,9 @@ public class NameSectionHeader extends SectionHeader {
 
     }
     public String getSectionName(int index) {
+        if(section == null) {
+            return "";
+        }
         return ((StringTableSection)section).getString(index);
     }
     public int getTableOffset() {
