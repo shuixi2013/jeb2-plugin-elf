@@ -5,9 +5,12 @@ import com.pnf.ELF.ELFFile;
 import com.pnfsoftware.jeb.core.units.codeobject.ILoaderInformation;
 import com.pnfsoftware.jeb.core.units.codeobject.ProcessorType;
 import com.pnfsoftware.jeb.core.units.codeobject.SubsystemType;
+import com.pnfsoftware.jeb.util.logging.GlobalLog;
+import com.pnfsoftware.jeb.util.logging.ILogger;
 
 
 public class ELFLoaderInformation implements ILoaderInformation {
+    private static final ILogger logger = GlobalLog.getLogger(ELFLoaderInformation.class);
 
 
     public static int HAS_RELOCATIONS;
@@ -56,6 +59,7 @@ public class ELFLoaderInformation implements ILoaderInformation {
                 targetProcessor = null;
         }
 
+
         // Always
         targetSubsystem = SubsystemType.LINUX;
 
@@ -79,13 +83,13 @@ public class ELFLoaderInformation implements ILoaderInformation {
         return imageSize;
     }
     public ProcessorType getTargetProcessor() {
-        return null;
+        return targetProcessor;
     }
     public SubsystemType getTargetSubsystem() {
         return targetSubsystem;
     }
     public int getWordSize() {
-        return 0;
+        return wordSize;
     }
     public boolean isLibraryFile() {
         return true;

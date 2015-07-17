@@ -4,6 +4,10 @@ import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.pnfsoftware.jeb.core.units.IUnitNotification;
+import com.pnfsoftware.jeb.core.units.NotificationType;
+import com.pnfsoftware.jeb.core.units.UnitNotification;
+
 public class SectionHeaderTable extends StreamReader {
 
     private short entrySize;
@@ -16,7 +20,7 @@ public class SectionHeaderTable extends StreamReader {
     private List<SectionHeader> relocations = new ArrayList<>();
 
 
-    public SectionHeaderTable(byte[] data, int offset, short entrySize, short number, short nameTableIndex) {
+    public SectionHeaderTable(byte[] data, int offset, short entrySize, short number, short nameTableIndex, List<IUnitNotification> notifications) {
 
         this.offset = offset;
         this.entrySize = entrySize;
@@ -46,6 +50,9 @@ public class SectionHeaderTable extends StreamReader {
         // Second pass to set the name table of all sections and link sections
         for(int index=0; index < entries.size(); index++) {
             header = entries.get(index);
+            if(header.getLink() > entries.size() || header.getLink() < 0) {
+                notifications.add(new UnitNotification(NotificationType.CORRUPTION, "sh_link points to a nonexistent section"));
+            }
             if(header.getType() == ELF.SHT_DYNSYM || header.getType() == ELF.SHT_SYMTAB) {
                 int strtabIndex = header.getLink();
                 nameTable = (StringTableSection)(entries.get(strtabIndex).getSection());

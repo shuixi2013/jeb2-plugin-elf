@@ -17,7 +17,7 @@ public class ELFPlugin extends AbstractUnitIdentifier {
 
 
     public ELFPlugin() {
-        super("ELF_file", 0);
+        super("ELF", 0);
     }
 
 

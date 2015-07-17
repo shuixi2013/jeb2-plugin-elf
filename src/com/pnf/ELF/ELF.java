@@ -96,9 +96,9 @@ public class ELF {
 
     public static String getClassString(int id) {
         switch(id) {
-            case ELF.ELFCLASSNONE:      return "ELFCLASSNONE";
-            case ELF.ELFCLASS32:        return "ELFCLASS32";
-            case ELF.ELFCLASS64:        return "ELFCLASS64";
+            case ELF.ELFCLASSNONE:      return "ELFNONE";
+            case ELF.ELFCLASS32:        return "ELF32";
+            case ELF.ELFCLASS64:        return "ELF64";
             default:                    return Integer.toHexString(id);
         }
     }
@@ -111,9 +111,9 @@ public class ELF {
     public static final byte ELFDATA2MSB = 2;
     public static String getDataString(int id) {
         switch(id) {
-            case ELF.ELFDATANONE:       return "ELFDATANONE";
-            case ELF.ELFDATA2LSB:       return "ELFDATA2LSB";
-            case ELF.ELFDATA2MSB:       return "ELFDATA2MSB";
+            case ELF.ELFDATANONE:       return "NONE";
+            case ELF.ELFDATA2LSB:       return "2's complement, little endian";
+            case ELF.ELFDATA2MSB:       return "2's complement, big endian";
             default:                    return Integer.toHexString(id);
         }
     }
@@ -123,8 +123,8 @@ public class ELF {
 
     public static String getVersionString(int id) {
         switch(id) {
-            case EV_NONE:               return "EV_NONE";
-            case EV_CURRENT:            return "EV_CURRENT";
+            case EV_NONE:               return "NONE";
+            case EV_CURRENT:            return "1 (CURRENT)";
             default:                    return Integer.toHexString(id);
         }
     }
@@ -141,14 +141,12 @@ public class ELF {
 
     public static String getTypeString(int id) {
         switch(id) {
-            case ET_NONE:           return "ET_NONE";
-            case ET_REL:            return "ET_REL";
-            case ET_EXEC:           return "ET_EXEC";
-            case ET_DYN:            return "ET_DYN";
-            case ET_CORE:           return "ET_CORE";
-            case ET_LOPROC:         return "ET_LOPROC";
-            case ET_HIPROC:         return "ET_HIPROC";
-            default:                return Integer.toHexString(id);
+            case ET_NONE:	return "NONE (None)";
+            case ET_REL:	return "REL (Relocatable file)";
+            case ET_EXEC:	return "EXEC (Executable file)";
+            case ET_DYN:	return "DYN (Shared object file)";
+            case ET_CORE:	return "CORE (Core file)";
+            default:        return Integer.toHexString(id);
         }
     }
 
@@ -175,6 +173,27 @@ public class ELF {
     public static final int ELFOSABI_C6000_LINUX = 65;  // Linux TMS320C6000
     public static final int ELFOSABI_ARM = 97;          // ARM
     public static final int ELFOSABI_STANDALONE = 255;  // Standalone (embedded) application
+
+    public static String getOSABIString(int osabi) {
+        switch(osabi) {
+            case ELFOSABI_NONE:		return "UNIX - System V";
+            case ELFOSABI_HPUX:		return "UNIX - HP-UX";
+            case ELFOSABI_NETBSD:	return "UNIX - NetBSD";
+            case ELFOSABI_GNU:		return "UNIX - GNU";
+            case ELFOSABI_SOLARIS:	return "UNIX - Solaris";
+            case ELFOSABI_AIX:		return "UNIX - AIX";
+            case ELFOSABI_IRIX:		return "UNIX - IRIX";
+            case ELFOSABI_FREEBSD:	return "UNIX - FreeBSD";
+            case ELFOSABI_TRU64:	return "UNIX - TRU64";
+            case ELFOSABI_MODESTO:	return "Novell - Modesto";
+            case ELFOSABI_OPENBSD:	return "UNIX - OpenBSD";
+            case ELFOSABI_OPENVMS:	return "VMS - OpenVMS";
+            case ELFOSABI_NSK:		return "HP - Non-Stop Kernel";
+            case ELFOSABI_AROS:		return "AROS";
+            case ELFOSABI_FENIXOS:	return "FenixOS";
+            default:                return "Unknown";
+        }
+    }
 
     // ELF machine
     public static final int EM_NONE          = 0; // No machine
@@ -334,18 +353,142 @@ public class ELF {
     public static final int EM_56800EX       = 200; // Freescale 56800EX Digital Signal Controller (DSCc)
 
     public static String getMachineString(int id) {
-        switch(id) {
-            case EM_NONE:       return "NONE";
-            case EM_M32:        return "M32";
-            case EM_SPARC:      return "SPARC";
-            case EM_386:        return "386";
-            case EM_68K:        return "68K";
-            case EM_88K:        return "88K";
-            case EM_860:        return "860";
-            case EM_MIPS:       return "MIPS";
-            case EM_ARM:        return "ARM";
-            case EM_X86_64:     return "X86_64";
-            default:            return Integer.toHexString(id);
+        switch (id)
+        {
+            case EM_NONE:		    return "None";
+            case EM_AARCH64:	    return "AArch64";
+            case EM_M32:		    return "WE32100";
+            case EM_SPARC:		    return "Sparc";
+            case EM_SPU:		    return "SPU";
+            case EM_386:		    return "Intel 80386";
+            case EM_68K:		    return "MC68000";
+            case EM_88K:		    return "MC88000";
+            case EM_486:		    return "Intel 80486";
+            case EM_860:		    return "Intel 80860";
+            case EM_MIPS:		    return "MIPS R3000";
+            case EM_S370:		    return "IBM System/370";
+            case EM_MIPS_RS3_LE:    return "MIPS R4000 big-endian";
+            case EM_PARISC:		    return "HPPA";
+            case EM_SPARC32PLUS:    return "Sparc v8+" ;
+            case EM_960:		    return "Intel 90860";
+            case EM_PPC:		    return "PowerPC";
+            case EM_PPC64:		    return "PowerPC64";
+            case EM_FR20:		    return "Fujitsu FR20";
+            case EM_RH32:		    return "TRW RH32";
+            case EM_ARM:		    return "ARM";
+            case EM_SH:			    return "Renesas / SuperH SH";
+            case EM_SPARCV9:	    return "Sparc v9";
+            case EM_TRICORE:	    return "Siemens Tricore";
+            case EM_ARC:		    return "ARC";
+            case EM_H8_300:		    return "Renesas H8/300";
+            case EM_H8_300H:	    return "Renesas H8/300H";
+            case EM_H8S:		    return "Renesas H8S";
+            case EM_H8_500:		    return "Renesas H8/500";
+            case EM_IA_64:		    return "Intel IA-64";
+            case EM_MIPS_X:		    return "Stanford MIPS-X";
+            case EM_COLDFIRE:	    return "Motorola Coldfire";
+            case EM_ALPHA:		    return "Alpha";
+            case EM_D10V:		    return "d10v";
+            case EM_D30V:		    return "d30v";
+            case EM_M32R:		    return "Renesas M32R (formerly Mitsubishi M32r)";
+            case EM_V800:		    return "Renesas V850 (using RH850 ABI)";
+            case EM_V850:		    return "Renesas V850";
+            case EM_MN10300:	    return "mn10300";
+            case EM_MN10200:	    return "mn10200";
+            case EM_FR30:		    return "Fujitsu FR30";
+            case EM_PJ:			    return "picoJava";
+            case EM_MMA:		    return "Fujitsu Multimedia Accelerator";
+            case EM_PCP:		    return "Siemens PCP";
+            case EM_NCPU:		    return "Sony nCPU embedded RISC processor";
+            case EM_NDR1:		    return "Denso NDR1 microprocesspr";
+            case EM_STARCORE:	    return "Motorola Star*Core processor";
+            case EM_ME16:		    return "Toyota ME16 processor";
+            case EM_ST100:		    return "STMicroelectronics ST100 processor";
+            case EM_TINYJ:		    return "Advanced Logic Corp. TinyJ embedded processor";
+            case EM_PDSP:		    return "Sony DSP processor";
+            case EM_PDP10:		    return "Digital Equipment Corp. PDP-10";
+            case EM_PDP11:		    return "Digital Equipment Corp. PDP-11";
+            case EM_FX66:		    return "Siemens FX66 microcontroller";
+            case EM_ST9PLUS:	    return "STMicroelectronics ST9+ 8/16 bit microcontroller";
+            case EM_ST7:		    return "STMicroelectronics ST7 8-bit microcontroller";
+            case EM_68HC16:		    return "Motorola MC68HC16 Microcontroller";
+            case EM_68HC12:		    return "Motorola MC68HC12 Microcontroller";
+            case EM_68HC11:		    return "Motorola MC68HC11 Microcontroller";
+            case EM_68HC08:		    return "Motorola MC68HC08 Microcontroller";
+            case EM_68HC05:		    return "Motorola MC68HC05 Microcontroller";
+            case EM_SVX:		    return "Silicon Graphics SVx";
+            case EM_ST19:		    return "STMicroelectronics ST19 8-bit microcontroller";
+            case EM_VAX:		    return "Digital VAX";
+            case EM_AVR:		    return "Atmel AVR 8-bit microcontroller";
+            case EM_CRIS:		    return "Axis Communications 32-bit embedded processor";
+            case EM_JAVELIN:	    return "Infineon Technologies 32-bit embedded cpu";
+            case EM_FIREPATH:	    return "Element 14 64-bit DSP processor";
+            case EM_ZSP:		    return "LSI Logic's 16-bit DSP processor";
+            case EM_MMIX:		    return "Donald Knuth's educational 64-bit processor";
+            case EM_HUANY:		    return "Harvard Universitys's machine-independent object format";
+            case EM_PRISM:		    return "Vitesse Prism";
+            case EM_S390:		    return "IBM S/390";
+            case EM_XTENSA:		    return "Tensilica Xtensa Processor";
+            case EM_VIDEOCORE:	    return "Alphamosaic VideoCore processor";
+            case EM_TMM_GPP:	    return "Thompson Multimedia General Purpose Processor";
+            case EM_NS32K:		    return "National Semiconductor 32000 series";
+            case EM_TPC:		    return "Tenor Network TPC processor";
+            case EM_ST200:		    return "STMicroelectronics ST200 microcontroller";
+            case EM_MAX:		    return "MAX Processor";
+            case EM_CR:			    return "National Semiconductor CompactRISC";
+            case EM_F2MC16:		    return "Fujitsu F2MC16";
+            case EM_MSP430:		    return "Texas Instruments msp430 microcontroller";
+            case EM_LATTICEMICO32:  return "Lattice Mico32";
+            case EM_M32C:	        return "Renesas M32c";
+            case EM_BLACKFIN:	    return "Analog Devices Blackfin";
+            case EM_SE_C33:		    return "S1C33 Family of Seiko Epson processors";
+            case EM_SEP:		    return "Sharp embedded microprocessor";
+            case EM_ARCA:		    return "Arca RISC microprocessor";
+            case EM_UNICORE:	    return "Unicore";
+            case EM_EXCESS:		    return "eXcess 16/32/64-bit configurable embedded CPU";
+            case EM_DXP:		    return "Icera Semiconductor Inc. Deep Execution Processor";
+            case EM_ALTERA_NIOS2:   return "Altera Nios II";
+            case EM_C166:
+            case EM_M16C:		    return "Renesas M16C series microprocessors";
+            case EM_DSPIC30F:	    return "Microchip Technology dsPIC30F Digital Signal Controller";
+            case EM_CE:			    return "Freescale Communication Engine RISC core";
+            case EM_TSK3000:	    return "Altium TSK3000 core";
+            case EM_RS08:		    return "Freescale RS08 embedded processor";
+            case EM_ECOG2:		    return "Cyan Technology eCOG2 microprocessor";
+            case EM_DSP24:		    return "New Japan Radio (NJR) 24-bit DSP Processor";
+            case EM_VIDEOCORE3:	    return "Broadcom VideoCore III processor";
+            case EM_SE_C17:		    return "Seiko Epson C17 family";
+            case EM_TI_C6000:	    return "Texas Instruments TMS320C6000 DSP family";
+            case EM_TI_C2000:	    return "Texas Instruments TMS320C2000 DSP family";
+            case EM_TI_C5500:	    return "Texas Instruments TMS320C55x DSP family";
+            case EM_MMDSP_PLUS:	    return "STMicroelectronics 64bit VLIW Data Signal Processor";
+            case EM_CYPRESS_M8C:    return "Cypress M8C microprocessor";
+            case EM_R32C:		    return "Renesas R32C series microprocessors";
+            case EM_TRIMEDIA:	    return "NXP Semiconductors TriMedia architecture family";
+            case EM_8051:		    return "Intel 8051 and variants";
+            case EM_STXP7X:		    return "STMicroelectronics STxP7x family";
+            case EM_NDS32:		    return "Andes Technology compact code size embedded RISC processor family";
+            case EM_ECOG1X:		    return "Cyan Technology eCOG1X family";
+            case EM_MAXQ30:		    return "Dallas Semiconductor MAXQ30 Core microcontrollers";
+            case EM_XIMO16:		    return "New Japan Radio (NJR) 16-bit DSP Processor";
+            case EM_MANIK:		    return "M2000 Reconfigurable RISC Microprocessor";
+            case EM_CRAYNV2:	    return "Cray Inc. NV2 vector architecture";
+            case EM_CR16:
+            case EM_RL78:		    return "Renesas RL78";
+            case EM_RX:			    return "Renesas RX";
+            case EM_METAG:		    return "Imagination Technologies Meta processor architecture";
+            case EM_MCST_ELBRUS:    return "MCST Elbrus general purpose hardware architecture";
+            case EM_ECOG16:		    return "Cyan Technology eCOG16 family";
+            case EM_ETPU:		    return "Freescale Extended Time Processing Unit";
+            case EM_SLE9X:		    return "Infineon Technologies SLE9X core";
+            case EM_AVR32:		    return "Atmel Corporation 32-bit microprocessor family";
+            case EM_STM8:		    return "STMicroeletronics STM8 8-bit microcontroller";
+            case EM_TILE64:		    return "Tilera TILE64 multicore architecture family";
+            case EM_TILEPRO:	    return "Tilera TILEPro multicore architecture family";
+            case EM_TILEGX:		    return "Tilera TILE-Gx multicore architecture family";
+            case EM_CUDA:		    return "NVIDIA CUDA architecture";
+            case EM_XGATE:		    return "Motorola XGATE embedded processor";
+            default:                return "Unknown";
         }
     }
 
@@ -674,7 +817,7 @@ public class ELF {
 
     public static final int R_MIPS_NONE         = 0;
     public static final int R_MIPS_REL_32       = 3;
-
+    public static final int R_386_JUMP_SLOT     = 7;
     public static int relocate(int id, int A, int ABitCount, int AHL, int P, int S, int G, int GP, int GP0, int EA, int L, R_SYMBOL sym) {
         int DTP_OFFSET = 0x8000;
         int TP_OFFSET = 0x8000;
