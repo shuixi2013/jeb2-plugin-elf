@@ -93,7 +93,7 @@ public class ELFUnit extends AbstractBinaryUnit implements ICodeObjectUnit, IInt
                             symType = SymbolType.OBJECT;
                             break;
                     }
-                    symbols.add(new SymbolInformation(symType, 0, (long)entry.getValue(), entry.getName(), (long)entry.getValue(), 0, entry.getSize()));
+                    symbols.add(new SymbolInformation(symType, 0, (long)entry.getValue(), entry.getName(), (long)entry.getValue(), (long)entry.getValue(), entry.getSize()));
                 }
             }
             sections.add(new ELFSectionInfo(header));
