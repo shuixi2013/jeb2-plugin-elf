@@ -11,17 +11,18 @@ import com.pnf.ELF.ELFFile;
 import com.pnf.ELF.SectionHeader;
 import com.pnf.ELF.SymbolTableEntry;
 import com.pnf.ELF.SymbolTableSection;
+import com.pnfsoftware.jeb.core.IUnitCreator;
 import com.pnfsoftware.jeb.core.actions.ActionContext;
 import com.pnfsoftware.jeb.core.actions.IActionData;
 import com.pnfsoftware.jeb.core.input.BytesInput;
 import com.pnfsoftware.jeb.core.input.IInput;
+import com.pnfsoftware.jeb.core.input.IInputLocationInformation;
 import com.pnfsoftware.jeb.core.output.AbstractUnitRepresentation;
 import com.pnfsoftware.jeb.core.output.IGenericDocument;
 import com.pnfsoftware.jeb.core.output.IUnitFormatter;
 import com.pnfsoftware.jeb.core.output.UnitFormatterAdapter;
 import com.pnfsoftware.jeb.core.properties.IPropertyDefinitionManager;
 import com.pnfsoftware.jeb.core.units.AbstractBinaryUnit;
-import com.pnfsoftware.jeb.core.units.IBinaryFrames;
 import com.pnfsoftware.jeb.core.units.IInteractiveUnit;
 import com.pnfsoftware.jeb.core.units.IUnit;
 import com.pnfsoftware.jeb.core.units.IUnitIdentifier;
@@ -42,7 +43,7 @@ public class ELFUnit extends AbstractBinaryUnit implements ICodeObjectUnit, IInt
     private ELFLoaderInformation loaderInfo;
     private byte[] data;
 
-    public ELFUnit(String name, IInput input, IUnitProcessor unitProcessor, IUnit parent, IPropertyDefinitionManager pdm) {
+    public ELFUnit(String name, IInput input, IUnitProcessor unitProcessor, IUnitCreator parent, IPropertyDefinitionManager pdm) {
         super("", input, "ELF_file", name, unitProcessor, parent, pdm);
         try(InputStream stream = input.getStream()) {
             data = IO.readInputStream(stream);
@@ -52,9 +53,6 @@ public class ELFUnit extends AbstractBinaryUnit implements ICodeObjectUnit, IInt
         }
     }
 
-    public ELFUnit(IBinaryFrames serializedData, IUnitProcessor unitProcessor, IUnit parent, IPropertyDefinitionManager pdm) {
-        super(serializedData, unitProcessor, parent, pdm);
-    }
 
     @Override
     public boolean process() {
@@ -133,10 +131,6 @@ public class ELFUnit extends AbstractBinaryUnit implements ICodeObjectUnit, IInt
 
 
 
-    @Override
-    public IBinaryFrames serialize() {
-        return null;
-    }
     @Override
     public IUnitFormatter getFormatter() {
         List<SectionHeader> sectionHeaders = elf.getSectionHeaderTable().getHeaders();
@@ -262,6 +256,14 @@ public class ELFUnit extends AbstractBinaryUnit implements ICodeObjectUnit, IInt
     }
     @Override
     public Map<String, String> getAddressLabels() {
+        return null;
+    }
+    @Override
+    public IInputLocationInformation addressToLocation(String address) {
+        return null;
+    }
+    @Override
+    public String locationToAddress(IInputLocationInformation location) {
         return null;
     }
 }

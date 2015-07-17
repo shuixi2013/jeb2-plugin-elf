@@ -1,6 +1,5 @@
 package com.pnf.ELF;
 
-import java.io.FileOutputStream;
 import java.util.List;
 
 import com.pnfsoftware.jeb.util.logging.GlobalLog;

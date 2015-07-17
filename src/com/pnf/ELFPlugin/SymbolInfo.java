@@ -15,7 +15,7 @@ public class SymbolInfo implements ISymbolInformation {
     public SymbolInfo(String name, long address, int type, int size) {
         this.name = name;
         this.address = address;
-        this.identifier = identifier;
+        this.identifier = address;
         this.size = (int)size;
 
         switch(type) {
