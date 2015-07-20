@@ -142,7 +142,9 @@ public class ELFUnit extends AbstractBinaryUnit implements ICodeObjectUnit, IInt
                     break;
                 }
             }
-            reparseUnits.add(target);
+            if(target != null) {
+                reparseUnits.add(target);
+            }
         }
 
 
