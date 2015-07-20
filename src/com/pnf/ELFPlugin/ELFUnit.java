@@ -49,7 +49,7 @@ public class ELFUnit extends AbstractBinaryUnit implements ICodeObjectUnit, IInt
     private byte[] data;
 
     public ELFUnit(String name, IInput input, IUnitProcessor unitProcessor, IUnitCreator parent, IPropertyDefinitionManager pdm) {
-        super("", input, "ELF", name, unitProcessor, parent, pdm);
+        super("", input, ELFPlugin.TYPE, name, unitProcessor, parent, pdm);
         try(InputStream stream = input.getStream()) {
             data = IO.readInputStream(stream);
         }
@@ -135,14 +135,10 @@ public class ELFUnit extends AbstractBinaryUnit implements ICodeObjectUnit, IInt
                 targetType = null;
         }
         if(targetType != null) {
-            // target = unitProcessor.process(this.name, new BytesInput(processImage), this, targetType, false);
-            for(IUnitIdentifier ident: unitProcessor.getUnitIdentifiers()) {
-                if(targetType.equals(ident.getFormatType())) {
-                    target = ident.prepare(name, new BytesInput(processImage), unitProcessor, this);
-                    break;
-                }
+            target = unitProcessor.process(name, new BytesInput(processImage), this, targetType, true);
+            if(target != null) {
+                reparseUnits.add(target);
             }
-            reparseUnits.add(target);
         }
 
 
@@ -243,12 +239,13 @@ public class ELFUnit extends AbstractBinaryUnit implements ICodeObjectUnit, IInt
             }
         });
         for(SectionHeader section : sectionHeaders) {
+            final SectionHeader section0 = section;
             switch(section.getType()) {
                 case ELF.SHT_STRTAB:
                     formatter.addDocumentPresentation(new AbstractUnitRepresentation(section.getName(), false) {
                         @Override
                         public IGenericDocument getDocument() {
-                            return new StringTableDocument(section);
+                            return new StringTableDocument(section0);
                         }
                     });
                     break;
@@ -256,7 +253,7 @@ public class ELFUnit extends AbstractBinaryUnit implements ICodeObjectUnit, IInt
                     formatter.addDocumentPresentation(new AbstractUnitRepresentation(section.getName(), false) {
                         @Override
                         public IGenericDocument getDocument() {
-                            return new HashTableDocument(section);
+                            return new HashTableDocument(section0);
                         }
                     });
                     break;
@@ -264,7 +261,7 @@ public class ELFUnit extends AbstractBinaryUnit implements ICodeObjectUnit, IInt
                     formatter.addDocumentPresentation(new AbstractUnitRepresentation(section.getName(), false) {
                         @Override
                         public IGenericDocument getDocument() {
-                            return new NotesDocument(section);
+                            return new NotesDocument(section0);
                         }
                     });
                     break;
@@ -274,7 +271,7 @@ public class ELFUnit extends AbstractBinaryUnit implements ICodeObjectUnit, IInt
                     formatter.addDocumentPresentation(new AbstractUnitRepresentation(section.getName(), false) {
                         @Override
                         public IGenericDocument getDocument() {
-                            return new SymbolTableDocument(section);
+                            return new SymbolTableDocument(section0);
                         }
                     });
                     break;
@@ -282,7 +279,7 @@ public class ELFUnit extends AbstractBinaryUnit implements ICodeObjectUnit, IInt
                     formatter.addDocumentPresentation(new AbstractUnitRepresentation(section.getName(), false) {
                         @Override
                         public IGenericDocument getDocument() {
-                            return new DynamicSectionDocument(section);
+                            return new DynamicSectionDocument(section0);
                         }
                     });
                     break;
@@ -291,7 +288,7 @@ public class ELFUnit extends AbstractBinaryUnit implements ICodeObjectUnit, IInt
                     formatter.addDocumentPresentation(new AbstractUnitRepresentation(section.getName(), false) {
                         @Override
                         public IGenericDocument getDocument() {
-                            return new RelocationSectionDocument(section);
+                            return new RelocationSectionDocument(section0);
                         }
                     });
                     break;
