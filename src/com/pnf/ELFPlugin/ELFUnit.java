@@ -135,13 +135,7 @@ public class ELFUnit extends AbstractBinaryUnit implements ICodeObjectUnit, IInt
                 targetType = null;
         }
         if(targetType != null) {
-            // target = unitProcessor.process(this.name, new BytesInput(processImage), this, targetType, false);
-            for(IUnitIdentifier ident: unitProcessor.getUnitIdentifiers()) {
-                if(targetType.equals(ident.getFormatType())) {
-                    target = ident.prepare(name, new BytesInput(processImage), unitProcessor, this);
-                    break;
-                }
-            }
+            target = unitProcessor.process(name, new BytesInput(processImage), this, targetType, true);
             if(target != null) {
                 reparseUnits.add(target);
             }
