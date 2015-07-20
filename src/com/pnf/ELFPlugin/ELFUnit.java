@@ -49,7 +49,7 @@ public class ELFUnit extends AbstractBinaryUnit implements ICodeObjectUnit, IInt
     private byte[] data;
 
     public ELFUnit(String name, IInput input, IUnitProcessor unitProcessor, IUnitCreator parent, IPropertyDefinitionManager pdm) {
-        super("", input, "ELF", name, unitProcessor, parent, pdm);
+        super("", input, ELFPlugin.TYPE, name, unitProcessor, parent, pdm);
         try(InputStream stream = input.getStream()) {
             data = IO.readInputStream(stream);
         }

@@ -9,21 +9,22 @@ import com.pnfsoftware.jeb.core.properties.IPropertyManager;
 import com.pnfsoftware.jeb.core.units.AbstractUnitIdentifier;
 import com.pnfsoftware.jeb.core.units.IUnit;
 import com.pnfsoftware.jeb.core.units.IUnitProcessor;
+import com.pnfsoftware.jeb.core.units.WellKnownUnitTypes;
 import com.pnfsoftware.jeb.util.logging.GlobalLog;
 import com.pnfsoftware.jeb.util.logging.ILogger;
 
 public class ELFPlugin extends AbstractUnitIdentifier {
     private static final ILogger logger = GlobalLog.getLogger(ELFPlugin.class);
 
+    public static final String TYPE = WellKnownUnitTypes.typeLinuxElf;
 
     public ELFPlugin() {
-        super("ELF", 0);
+        super(TYPE, 0);
     }
-
 
     @Override
     public PluginInformation getPluginInformation() {
-        return new PluginInformation("ELF File Unit", "", "1.0", "PNF Software");
+        return new PluginInformation("ELF File Unit", "Linux ELF parser plugin", "1.0", "PNF Software");
     }
 
     @Override
