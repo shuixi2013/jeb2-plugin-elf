@@ -11,7 +11,7 @@ public class SectionHeader extends StreamReader {
     protected int s_type;
     protected String s_type_s;
     protected int s_flags;
-    protected List<String> s_flags_s = new ArrayList<>();
+    protected String s_flags_s;
     protected int s_addr;
     protected int s_offset;
     protected int s_size;
@@ -38,14 +38,15 @@ public class SectionHeader extends StreamReader {
         s_name_s = name;
 
         s_flags = readInt(stream);
+        s_flags_s = "";
         if((s_flags & 0x1) == ELF.SHF_WRITE)
-            s_flags_s.add("SHF_WRITE");
+            s_flags_s += "WRITE ";
         if((s_flags & 0x2) == ELF.SHF_ALLOC)
-            s_flags_s.add("SHF_ALLOC");
+            s_flags_s += "ALLOC ";
         if((s_flags & 0x4) == ELF.SHF_EXECINSTR)
-            s_flags_s.add("SHF_EXECINSTR");
+            s_flags_s += "EXECINSTR ";
         if((s_flags & 0xf0000000) == ELF.SHF_MASKPROC)
-            s_flags_s.add("SHF_MASKPROC");
+            s_flags_s += "MASKPROC ";
         s_addr = readInt(stream);
         s_offset = readInt(stream);
         s_size = readInt(stream);
@@ -96,7 +97,7 @@ public class SectionHeader extends StreamReader {
             default:
                 section = new Section(data, s_size, s_offset);
         }
-        s_type_s = ELF.getSectionTypeString(s_type);
+        s_type_s = ELF.getSHTString(s_type);
     }
 
     /**
@@ -145,12 +146,7 @@ public class SectionHeader extends StreamReader {
     }
 
     public String getFlagsString() {
-        String output = "";
-        for(String flag : s_flags_s) {
-            //output += flag.replace("SHF_", "").charAt(0);
-            output += flag + "\n";
-        }
-        return output;
+        return s_flags_s;
     }
 
 

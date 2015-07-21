@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.pnf.ELF.ELF;
+import static com.pnf.ELF.ELF.*;
 import com.pnf.ELF.ELFFile;
 import com.pnf.ELF.Header;
 import com.pnf.ELF.ProgramHeader;
@@ -17,6 +17,7 @@ import com.pnfsoftware.jeb.core.IUnitCreator;
 import com.pnfsoftware.jeb.core.actions.ActionContext;
 import com.pnfsoftware.jeb.core.actions.IActionData;
 import com.pnfsoftware.jeb.core.input.BytesInput;
+import com.pnfsoftware.jeb.core.input.FileInputLocationInformation;
 import com.pnfsoftware.jeb.core.input.IInput;
 import com.pnfsoftware.jeb.core.input.IInputLocationInformation;
 import com.pnfsoftware.jeb.core.output.AbstractUnitRepresentation;
@@ -72,21 +73,21 @@ public class ELFUnit extends AbstractBinaryUnit implements ICodeObjectUnit, IInt
         SymbolTableSection symtab = null;
         SymbolType symType;
         for(SectionHeader header : elf.getSectionHeaderTable().getHeaders()) {
-            if(header.getType() == ELF.SHT_DYNSYM || header.getType() == ELF.SHT_SYMTAB) {
+            if(header.getType() == SHT_DYNSYM || header.getType() == SHT_SYMTAB) {
                 symtab = (SymbolTableSection)(header.getSection());
                 for(SymbolTableEntry entry : symtab.getEntries()) {
                     symType = null;
                     switch(entry.getType()) {
-                        case ELF.STT_FUNC:
+                        case STT_FUNC:
                             symType = SymbolType.FUNCTION;
                             break;
-                        case ELF.STT_SECTION:
+                        case STT_SECTION:
                             symType = SymbolType.SECTION;
                             break;
-                        case ELF.STT_FILE:
+                        case STT_FILE:
                             symType = SymbolType.FILE;
                             break;
-                        case ELF.STT_OBJECT:
+                        case STT_OBJECT:
                             symType = SymbolType.OBJECT;
                             break;
                     }
@@ -94,15 +95,15 @@ public class ELFUnit extends AbstractBinaryUnit implements ICodeObjectUnit, IInt
                 }
             }
             sections.add(new ELFSectionInfo(header));
-            /* if(header.getAddress() != 0) {
-                segments.add(new ELFSectionInfo(header));
-            }*/
-        }
-        for(ProgramHeader header : elf.getProgramHeaderTable().getHeaders()) {
-            if(header.getMemorySize() > 0 && header.getType() == ELF.PT_LOAD) {
+            if((header.getFlags() | SHF_ALLOC) != 0) {
                 segments.add(new ELFSectionInfo(header));
             }
         }
+        /*for(ProgramHeader header : elf.getProgramHeaderTable().getHeaders()) {
+            if(header.getMemorySize() > 0 && header.getType() == PT_LOAD) {
+                segments.add(new ELFSectionInfo(header));
+            }
+        }*/
         notifications.addAll(elf.getNotifications());
         byte[] processImage;
         long minAddr = Long.MAX_VALUE;
@@ -128,7 +129,7 @@ public class ELFUnit extends AbstractBinaryUnit implements ICodeObjectUnit, IInt
         IUnit target = null;
         String targetType;
         switch(elf.getArch()) {
-            case ELF.EM_MIPS:
+            case EM_MIPS:
                 targetType = "MIPS";
                 break;
             default:
@@ -241,7 +242,7 @@ public class ELFUnit extends AbstractBinaryUnit implements ICodeObjectUnit, IInt
         for(SectionHeader section : sectionHeaders) {
             final SectionHeader section0 = section;
             switch(section.getType()) {
-                case ELF.SHT_STRTAB:
+                case SHT_STRTAB:
                     formatter.addDocumentPresentation(new AbstractUnitRepresentation(section.getName(), false) {
                         @Override
                         public IGenericDocument getDocument() {
@@ -249,7 +250,7 @@ public class ELFUnit extends AbstractBinaryUnit implements ICodeObjectUnit, IInt
                         }
                     });
                     break;
-                case ELF.SHT_HASH:
+                case SHT_HASH:
                     formatter.addDocumentPresentation(new AbstractUnitRepresentation(section.getName(), false) {
                         @Override
                         public IGenericDocument getDocument() {
@@ -257,7 +258,7 @@ public class ELFUnit extends AbstractBinaryUnit implements ICodeObjectUnit, IInt
                         }
                     });
                     break;
-                case ELF.SHT_NOTE:
+                case SHT_NOTE:
                     formatter.addDocumentPresentation(new AbstractUnitRepresentation(section.getName(), false) {
                         @Override
                         public IGenericDocument getDocument() {
@@ -266,8 +267,8 @@ public class ELFUnit extends AbstractBinaryUnit implements ICodeObjectUnit, IInt
                     });
                     break;
 
-                case ELF.SHT_DYNSYM:
-                case ELF.SHT_SYMTAB:
+                case SHT_DYNSYM:
+                case SHT_SYMTAB:
                     formatter.addDocumentPresentation(new AbstractUnitRepresentation(section.getName(), false) {
                         @Override
                         public IGenericDocument getDocument() {
@@ -275,7 +276,7 @@ public class ELFUnit extends AbstractBinaryUnit implements ICodeObjectUnit, IInt
                         }
                     });
                     break;
-                case ELF.SHT_DYNAMIC:
+                case SHT_DYNAMIC:
                     formatter.addDocumentPresentation(new AbstractUnitRepresentation(section.getName(), false) {
                         @Override
                         public IGenericDocument getDocument() {
@@ -283,8 +284,8 @@ public class ELFUnit extends AbstractBinaryUnit implements ICodeObjectUnit, IInt
                         }
                     });
                     break;
-                case ELF.SHT_RELA:
-                case ELF.SHT_REL:
+                case SHT_RELA:
+                case SHT_REL:
                     formatter.addDocumentPresentation(new AbstractUnitRepresentation(section.getName(), false) {
                         @Override
                         public IGenericDocument getDocument() {
@@ -359,10 +360,20 @@ public class ELFUnit extends AbstractBinaryUnit implements ICodeObjectUnit, IInt
     }
     @Override
     public String locationToAddress(IInputLocationInformation location) {
-        return null;
+        if(!(location instanceof FileInputLocationInformation)) {
+            throw new IllegalArgumentException("Unrecognized IInputLocationInformation implementor");
+        }
+        return "" + ((FileInputLocationInformation)location).getOffset();
     }
     @Override
     public IInputLocationInformation addressToLocation(String address) {
-        return null;
+        long offset = Long.parseLong(address);
+        long size = -1;
+        for(ISegmentInformation section : sections) {
+            if(offset == section.getOffsetInFile()) {
+                size = section.getSizeInFile();
+            }
+        }
+        return new FileInputLocationInformation(offset);
     }
 }
