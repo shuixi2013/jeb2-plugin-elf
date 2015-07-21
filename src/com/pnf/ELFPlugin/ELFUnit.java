@@ -95,7 +95,7 @@ public class ELFUnit extends AbstractBinaryUnit implements ICodeObjectUnit, IInt
                 }
             }
             sections.add(new ELFSectionInfo(header));
-            if((header.getFlags() | SHF_ALLOC) != 0) {
+            if((header.getFlags() & SHF_ALLOC) != 0) {
                 segments.add(new ELFSectionInfo(header));
             }
         }
