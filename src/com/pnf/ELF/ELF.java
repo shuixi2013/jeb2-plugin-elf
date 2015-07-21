@@ -2,7 +2,7 @@ package com.pnf.ELF;
 
 public class ELF {
     // Class to hold constants
-    
+
 
 
 
@@ -32,31 +32,31 @@ public class ELF {
     public static final int SHT_HIUSER = 0xffffffff;
 
 
-    public static String getSectionTypeString(int id) {
+    public static String getSHTString(int id) {
         switch(id) {
-            case SHT_NULL:                  return "SHT_NULL";
-            case SHT_PROGBITS:              return "SHT_PROGBITS";
-            case SHT_SYMTAB:                return "SHT_SYMTAB";
-            case SHT_STRTAB:                return "SHT_STRTAB";
-            case SHT_RELA:                  return "SHT_RELA";
-            case SHT_HASH:                  return "SHT_HASH";
-            case SHT_DYNAMIC:               return "SHT_DYNAMIC";
-            case SHT_NOTE:                  return "SHT_NOTE";
-            case SHT_NOBITS:                return "SHT_NOBITS";
-            case SHT_REL:                   return "SHT_REL";
-            case SHT_SHLIB:                 return "SHT_SHLIB";
-            case SHT_DYNSYM:                return "SHT_DYNSYM";
-            case SHT_INIT_ARRAY:            return "SHT_INIT_ARRAY";
-            case SHT_FINI_ARRAY:            return "SHT_FINI_ARRAY";
-            case SHT_PREINIT_ARRAY:         return "SHT_PREINIT_ARRAY";
-            case SHT_GROUP:                 return "SHT_GROUP";
-            case SHT_SYMTAB_SHNDX:          return "SHT_SYMTAB_SHNDX";
-            case SHT_LOOS:                  return "SHT_LOOS";
-            case SHT_HIOS:                  return "SHT_HIOS";
-            case SHT_LOPROC:                return "SHT_LOPROC";
-            case SHT_HIPROC:                return "SHT_HIPROC";
-            case SHT_LOUSER:                return "SHT_LOUSER";
-            case SHT_HIUSER:                return "SHT_HIUSER";
+            case SHT_NULL:                  return "NULL";
+            case SHT_PROGBITS:              return "PROGBITS";
+            case SHT_SYMTAB:                return "SYMTAB";
+            case SHT_STRTAB:                return "STRTAB";
+            case SHT_RELA:                  return "RELA";
+            case SHT_HASH:                  return "HASH";
+            case SHT_DYNAMIC:               return "DYNAMIC";
+            case SHT_NOTE:                  return "NOTE";
+            case SHT_NOBITS:                return "NOBITS";
+            case SHT_REL:                   return "REL";
+            case SHT_SHLIB:                 return "SHLIB";
+            case SHT_DYNSYM:                return "DYNSYM";
+            case SHT_INIT_ARRAY:            return "INIT_ARRAY";
+            case SHT_FINI_ARRAY:            return "FINI_ARRAY";
+            case SHT_PREINIT_ARRAY:         return "PREINIT_ARRAY";
+            case SHT_GROUP:                 return "GROUP";
+            case SHT_SYMTAB_SHNDX:          return "SYMTAB_SHNDX";
+            case SHT_LOOS:                  return "LOOS";
+            case SHT_HIOS:                  return "HIOS";
+            case SHT_LOPROC:                return "LOPROC";
+            case SHT_HIPROC:                return "HIPROC";
+            case SHT_LOUSER:                return "LOUSER";
+            case SHT_HIUSER:                return "HIUSER";
             default:                        break;
         }
         return Integer.toHexString(id);
@@ -84,6 +84,25 @@ public class ELF {
     public static final int SHF_COMPRESSED = 0x800;
     public static final int SHF_MASKOS = 0x0ff00000;
     public static final int SHF_MASKPROC = 0xf0000000;
+    public static String getSHFString(int id) {
+        switch(id) {
+            case SHF_WRITE:                 return "WRITE";
+            case SHF_ALLOC:                 return "ALLOC";
+            case SHF_EXECINSTR:             return "EXECINSTR";
+            case SHF_MERGE:                 return "MERGE";
+            case SHF_STRINGS:               return "STRINGS";
+            case SHF_INFO_LINK:             return "INFO_LINK";
+            case SHF_LINK_ORDER:            return "LINK_ORDER";
+            case SHF_OS_NONCONFORMING:      return "OS_NONCONFORMING";
+            case SHF_GROUP:                 return "GROUP";
+            case SHF_TLS:                   return "TLS";
+            case SHF_COMPRESSED:            return "COMPRESSED";
+            case SHF_MASKOS:                return "MASKOS";
+            case SHF_MASKPROC:              return "MASKPROC";
+            default:                        return null;
+        }
+    }
+
 
     public static byte[] ElfMagic = { (byte)0x7F, 'E', 'L', 'F' };
 
@@ -94,7 +113,7 @@ public class ELF {
     public static final byte ELFCLASS32 = 1;
     public static final byte ELFCLASS64 = 2;
 
-    public static String getClassString(int id) {
+    public static String getELFClassString(int id) {
         switch(id) {
             case ELF.ELFCLASSNONE:      return "ELFNONE";
             case ELF.ELFCLASS32:        return "ELF32";
@@ -109,7 +128,7 @@ public class ELF {
     public static final byte ELFDATA2LSB = 1;
     // 2's complement big endian
     public static final byte ELFDATA2MSB = 2;
-    public static String getDataString(int id) {
+    public static String getELFDataString(int id) {
         switch(id) {
             case ELF.ELFDATANONE:       return "NONE";
             case ELF.ELFDATA2LSB:       return "2's complement, little endian";
@@ -121,7 +140,7 @@ public class ELF {
     public static final int EV_NONE = 0;
     public static final int EV_CURRENT = 1;
 
-    public static String getVersionString(int id) {
+    public static String getEVString(int id) {
         switch(id) {
             case EV_NONE:               return "NONE";
             case EV_CURRENT:            return "1 (CURRENT)";
@@ -139,7 +158,7 @@ public class ELF {
     public static final short ET_HIPROC = (short)0xffff;
 
 
-    public static String getTypeString(int id) {
+    public static String getETString(int id) {
         switch(id) {
             case ET_NONE:	return "NONE (None)";
             case ET_REL:	return "REL (Relocatable file)";
@@ -352,7 +371,7 @@ public class ELF {
     public static final int EM_78KOR         = 199; // Renesas 78KOR family
     public static final int EM_56800EX       = 200; // Freescale 56800EX Digital Signal Controller (DSCc)
 
-    public static String getMachineString(int id) {
+    public static String getEMString(int id) {
         switch (id)
         {
             case EM_NONE:		    return "None";
@@ -574,155 +593,84 @@ public class ELF {
 
     public static String getDT(int id) {
         switch(id) {
-            case DT_NULL:
-                return "DT_NULL";
-            case DT_NEEDED:
-                return "DT_NEEDED";
-            case DT_PLTRELSZ:
-                return "DT_PLTRELSZ";
-            case DT_PLTGOT:
-                return "DT_PLTGOT";
-            case DT_HASH:
-                return "DT_HASH";
-            case DT_STRTAB:
-                return "DT_STRTAB";
-            case DT_SYMTAB:
-                return "DT_SYMTAB";
-            case DT_RELASZ:
-                return "DT_RELASZ";
-            case DT_RELAENT:
-                return "DT_RELAENT";
-            case DT_RELA:
-                return "DT_RELA";
-            case DT_STRSZ:
-                return "DT_STRSZ";
-            case DT_SYMENT:
-                return "DT_SYMENT";
-            case DT_INIT:
-                return "DT_INIT";
-            case DT_FINI:
-                return "DT_FINI";
-            case DT_SONAME:
-                return "DT_SONAME";
-            case DT_RPATH:
-                return "DT_RPATH";
-            case DT_SYMBOLIC:
-                return "DT_SYMBOLIC";
-            case DT_REL:
-                return "DT_REL";
-            case DT_RELSZ:
-                return "DT_RELSZ";
-            case DT_RELENT:
-                return "DT_RELENT";
-            case DT_PLTREL:
-                return "DT_PLTREL";
-            case DT_DEBUG:
-                return "DT_DEBUG";
-            case DT_TEXTREL:
-                return "DT_TEXTREL";
-            case DT_JMPREL:
-                return "DT_JMPREL";
-            case DT_LOPROC:
-                return "DT_LOPROC";
-            case DT_HIPROC:
-                return "DT_HIPROC";
+            case DT_NULL:                           return "NULL";
+            case DT_NEEDED:                         return "NEEDED";
+            case DT_PLTRELSZ:                       return "PLTRELSZ";
+            case DT_PLTGOT:                         return "PLTGOT";
+            case DT_HASH:                           return "HASH";
+            case DT_STRTAB:                         return "STRTAB";
+            case DT_SYMTAB:                         return "SYMTAB";
+            case DT_RELASZ:                         return "RELASZ";
+            case DT_RELAENT:                        return "RELAENT";
+            case DT_RELA:                           return "RELA";
+            case DT_STRSZ:                          return "STRSZ";
+            case DT_SYMENT:                         return "SYMENT";
+            case DT_INIT:                           return "INIT";
+            case DT_FINI:                           return "FINI";
+            case DT_SONAME:                         return "SONAME";
+            case DT_RPATH:                          return "RPATH";
+            case DT_SYMBOLIC:                       return "SYMBOLIC";
+            case DT_REL:                            return "REL";
+            case DT_RELSZ:                          return "RELSZ";
+            case DT_RELENT:                         return "RELENT";
+            case DT_PLTREL:                         return "PLTREL";
+            case DT_DEBUG:                          return "DEBUG";
+            case DT_TEXTREL:                        return "TEXTREL";
+            case DT_JMPREL:                         return "JMPREL";
+            case DT_LOPROC:                         return "LOPROC";
+            case DT_HIPROC:                         return "HIPROC";
 
 
-            case DT_MIPS_RLD_VERSION:
-                return "DT_MIPS_RLD_VERSION";
-            case DT_MIPS_TIME_STAMP:
-                return "DT_MIPS_TIME_STAMP";
-            case DT_MIPS_ICHECKSUM:
-                return "DT_MIPS_ICHECKSUM";
-            case DT_MIPS_IVERSION:
-                return "DT_MIPS_IVERSION";
-            case DT_MIPS_FLAGS:
-                return "DT_MIPS_FLAGS";
-            case DT_MIPS_BASE_ADDRESS:
-                return "DT_MIPS_BASE_ADDRESS";
-            case DT_MIPS_MSYM:
-                return "DT_MIPS_MSYM";
-            case DT_MIPS_CONFLICT:
-                return "DT_MIPS_CONFLICT";
-            case DT_MIPS_LIBLIST:
-                return "DT_MIPS_LIBLIST";
-            case DT_MIPS_LOCAL_GOTNO:
-                return "DT_MIPS_LOCAL_GOTNO";
-            case DT_MIPS_CONFLICTNO:
-                return "DT_MIPS_CONFLICTNO";
-            case DT_MIPS_LIBLISTNO:
-                return "DT_MIPS_LIBLISTNO";
-            case DT_MIPS_SYMTABNO:
-                return "DT_MIPS_SYMTABNO";
-            case DT_MIPS_UNREFEXTNO:
-                return "DT_MIPS_UNREFEXTNO";
-            case DT_MIPS_GOTSYM:
-                return "DT_MIPS_GOTSYM";
-            case DT_MIPS_HIPAGENO:
-                return "DT_MIPS_HIPAGENO";
-            case DT_MIPS_RLD_MAP:
-                return "DT_MIPS_RLD_MAP";
-            case DT_MIPS_DELTA_CLASS:
-                return "DT_MIPS_DELTA_CLASS";
-            case DT_MIPS_DELTA_CLASS_NO:
-                return "DT_MIPS_DELTA_CLASS_NO";
-            case DT_MIPS_DELTA_INSTANCE:
-                return "DT_MIPS_DELTA_INSTANCE";
-            case DT_MIPS_DELTA_INSTANCE_NO:
-                return "DT_MIPS_DELTA_INSTANCE_NO";
-            case DT_MIPS_DELTA_RELOC:
-                return "DT_MIPS_DELTA_RELOC";
-            case DT_MIPS_DELTA_RELOC_NO:
-                return "DT_MIPS_DELTA_RELOC_NO";
-            case DT_MIPS_DELTA_SYM:
-                return "DT_MIPS_DELTA_SYM";
-            case DT_MIPS_DELTA_SYM_NO:
-                return "DT_MIPS_DELTA_SYM_NO";
-            case DT_MIPS_DELTA_CLASSSYM:
-                return "DT_MIPS_DELTA_CLASSSYM";
-            case DT_MIPS_DELTA_CLASSSYM_NO:
-                return "DT_MIPS_DELTA_CLASSSYM_NO";
-            case DT_MIPS_CXX_FLAGS:
-                return "DT_MIPS_CXX_FLAGS";
-            case DT_MIPS_PIXIE_INIT:
-                return "DT_MIPS_PIXIE_INIT";
-            case DT_MIPS_SYMBOL_LIB:
-                return "DT_MIPS_SYMBOL_LIB";
-            case DT_MIPS_LOCALPAGE_GOTIDX:
-                return "DT_MIPS_LOCALPAGE_GOTIDX";
-            case DT_MIPS_LOCAL_GOTIDX:
-                return "DT_MIPS_LOCAL_GOTIDX";
-            case DT_MIPS_HIDDEN_GOTIDX:
-                return "DT_MIPS_HIDDEN_GOTIDX";
-            case DT_MIPS_PROTECTED_GOTIDX:
-                return "DT_MIPS_PROTECTED_GOTIDX";
-            case DT_MIPS_OPTIONS:
-                return "DT_MIPS_OPTIONS";
-            case DT_MIPS_INTERFACE:
-                return "DT_MIPS_INTERFACE";
-            case DT_MIPS_DYNSTR_ALIGN:
-                return "DT_MIPS_DYNSTR_ALIGN";
-            case DT_MIPS_INTERFACE_SIZE:
-                return "DT_MIPS_INTERFACE_SIZE";
-            case DT_MIPS_RLD_TEXT_RESOLVE_ADDR:
-                return "DT_MIPS_RLD_TEXT_RESOLVE_ADDR";
-            case DT_MIPS_PERF_SUFFIX:
-                return "DT_MIPS_PERF_SUFFIX";
-            case DT_MIPS_COMPACT_SIZE:
-                return "DT_MIPS_COMPACT_SIZE";
-            case DT_MIPS_GP_VALUE:
-                return "DT_MIPS_GP_VALUE";
-            case DT_MIPS_AUX_DYNAMIC:
-                return "DT_MIPS_AUX_DYNAMIC";
-            case DT_MIPS_PLTGOT:
-                return "DT_MIPS_PLTGOT";
-            case DT_MIPS_RWPLT:
-                return "DT_MIPS_RWPLT";
-            default:
-                return Integer.toHexString(id);
+            // MIPS Specific
+            case DT_MIPS_RLD_VERSION:               return "MIPS_RLD_VERSION";
+            case DT_MIPS_TIME_STAMP:                return "MIPS_TIME_STAMP";
+            case DT_MIPS_ICHECKSUM:                 return "MIPS_ICHECKSUM";
+            case DT_MIPS_IVERSION:                  return "MIPS_IVERSION";
+            case DT_MIPS_FLAGS:                     return "MIPS_FLAGS";
+            case DT_MIPS_BASE_ADDRESS:              return "MIPS_BASE_ADDRESS";
+            case DT_MIPS_MSYM:                      return "MIPS_MSYM";
+            case DT_MIPS_CONFLICT:                  return "MIPS_CONFLICT";
+            case DT_MIPS_LIBLIST:                   return "MIPS_LIBLIST";
+            case DT_MIPS_LOCAL_GOTNO:               return "MIPS_LOCAL_GOTNO";
+            case DT_MIPS_CONFLICTNO:                return "MIPS_CONFLICTNO";
+            case DT_MIPS_LIBLISTNO:                 return "MIPS_LIBLISTNO";
+            case DT_MIPS_SYMTABNO:                  return "MIPS_SYMTABNO";
+            case DT_MIPS_UNREFEXTNO:                return "MIPS_UNREFEXTNO";
+            case DT_MIPS_GOTSYM:                    return "MIPS_GOTSYM";
+            case DT_MIPS_HIPAGENO:                  return "MIPS_HIPAGENO";
+            case DT_MIPS_RLD_MAP:                   return "MIPS_RLD_MAP";
+            case DT_MIPS_DELTA_CLASS:               return "MIPS_DELTA_CLASS";
+            case DT_MIPS_DELTA_CLASS_NO:            return "MIPS_DELTA_CLASS_NO";
+            case DT_MIPS_DELTA_INSTANCE:            return "MIPS_DELTA_INSTANCE";
+            case DT_MIPS_DELTA_INSTANCE_NO:         return "MIPS_DELTA_INSTANCE_NO";
+            case DT_MIPS_DELTA_RELOC:               return "MIPS_DELTA_RELOC";
+            case DT_MIPS_DELTA_RELOC_NO:            return "MIPS_DELTA_RELOC_NO";
+            case DT_MIPS_DELTA_SYM:                 return "MIPS_DELTA_SYM";
+            case DT_MIPS_DELTA_SYM_NO:              return "MIPS_DELTA_SYM_NO";
+            case DT_MIPS_DELTA_CLASSSYM:            return "MIPS_DELTA_CLASSSYM";
+            case DT_MIPS_DELTA_CLASSSYM_NO:         return "MIPS_DELTA_CLASSSYM_NO";
+            case DT_MIPS_CXX_FLAGS:                 return "MIPS_CXX_FLAGS";
+            case DT_MIPS_PIXIE_INIT:                return "MIPS_PIXIE_INIT";
+            case DT_MIPS_SYMBOL_LIB:                return "MIPS_SYMBOL_LIB";
+            case DT_MIPS_LOCALPAGE_GOTIDX:          return "MIPS_LOCALPAGE_GOTIDX";
+            case DT_MIPS_LOCAL_GOTIDX:              return "MIPS_LOCAL_GOTIDX";
+            case DT_MIPS_HIDDEN_GOTIDX:             return "MIPS_HIDDEN_GOTIDX";
+            case DT_MIPS_PROTECTED_GOTIDX:          return "MIPS_PROTECTED_GOTIDX";
+            case DT_MIPS_OPTIONS:                   return "MIPS_OPTIONS";
+            case DT_MIPS_INTERFACE:                 return "MIPS_INTERFACE";
+            case DT_MIPS_DYNSTR_ALIGN:              return "MIPS_DYNSTR_ALIGN";
+            case DT_MIPS_INTERFACE_SIZE:            return "MIPS_INTERFACE_SIZE";
+            case DT_MIPS_RLD_TEXT_RESOLVE_ADDR:     return "MIPS_RLD_TEXT_RESOLVE_ADDR";
+            case DT_MIPS_PERF_SUFFIX:               return "MIPS_PERF_SUFFIX";
+            case DT_MIPS_COMPACT_SIZE:              return "MIPS_COMPACT_SIZE";
+            case DT_MIPS_GP_VALUE:                  return "MIPS_GP_VALUE";
+            case DT_MIPS_AUX_DYNAMIC:               return "MIPS_AUX_DYNAMIC";
+            case DT_MIPS_PLTGOT:                    return "MIPS_PLTGOT";
+            case DT_MIPS_RWPLT:                     return "MIPS_RWPLT";
+            default:                                return Integer.toHexString(id);
         }
     }
-	
+
 	public static final int PT_NULL = 0;
     public static final int PT_LOAD = 1;
     public static final int PT_DYNAMIC = 2;
@@ -741,23 +689,23 @@ public class ELF {
     public static final int PT_GNU_STACK = PT_LOOS + 0x474e551;
 
 
-    public static String getSegmentType(int id) {
+    public static String getPTString(int id) {
         switch(id) {
-            case PT_NULL:                   return "PT_NULL";
-            case PT_LOAD:                   return "PT_LOAD";
-            case PT_DYNAMIC:                return "PT_DYNAMIC";
-            case PT_INTERP:                 return "PT_INTERP";
-            case PT_NOTE:                   return "PT_NOTE";
-            case PT_SHLIB:                  return "PT_SHLIB";
-            case PT_PHDR:                   return "PT_PHDR";
-            case PT_TLS:                    return "PT_TLS";
-            case PT_LOOS:                   return "PT_LOOS";
-            case PT_HIOS:                   return "PT_HIOS";
-            case PT_LOPROC:                 return "PT_LOPROC";
-            case PT_HIPROC:                 return "PT_HIPROC";
-            case PT_GNU_EH_FRAME:           return "PT_GNU_EH_FRAME";
-            case PT_GNU_RELRO:              return "PT_GNU_RELRO";
-            case PT_GNU_STACK:              return "PT_GNU_STACK";
+            case PT_NULL:                   return "NULL";
+            case PT_LOAD:                   return "LOAD";
+            case PT_DYNAMIC:                return "DYNAMIC";
+            case PT_INTERP:                 return "INTERP";
+            case PT_NOTE:                   return "NOTE";
+            case PT_SHLIB:                  return "SHLIB";
+            case PT_PHDR:                   return "PHDR";
+            case PT_TLS:                    return "TLS";
+            case PT_LOOS:                   return "LOOS";
+            case PT_HIOS:                   return "HIOS";
+            case PT_LOPROC:                 return "LOPROC";
+            case PT_HIPROC:                 return "HIPROC";
+            case PT_GNU_EH_FRAME:           return "GNU_EH_FRAME";
+            case PT_GNU_RELRO:              return "GNU_RELRO";
+            case PT_GNU_STACK:              return "GNU_STACK";
             default:                        return Integer.toHexString(id);
         }
     }
@@ -768,7 +716,7 @@ public class ELF {
     public static final int PF_R = 0x4;
     public static final int PF_MASKOS = 0x0ff00000;
     public static final int PF_MASKPROC = 0xf0000000;
-	
+
     // Symbol table entry bind
     public static final int STB_LOCAL = 0;
     public static final int STB_GLOBAL = 1;
@@ -776,13 +724,13 @@ public class ELF {
     public static final int STB_LOPROC = 13;
     public static final int STB_HIPROC = 15;
 
-    public static String getSTB(int id) {
+    public static String getSTBString(int id) {
         switch(id) {
-            case ELF.STB_LOCAL:         return "STB_LOCAL";
-            case ELF.STB_GLOBAL:        return "STB_GLOBAL";
-            case ELF.STB_WEAK:          return "STB_WEAK";
-            case ELF.STB_LOPROC:        return "STB_LOPROC";
-            case ELF.STB_HIPROC:        return "STB_HIPROC";
+            case ELF.STB_LOCAL:         return "LOCAL";
+            case ELF.STB_GLOBAL:        return "GLOBAL";
+            case ELF.STB_WEAK:          return "WEAK";
+            case ELF.STB_LOPROC:        return "LOPROC";
+            case ELF.STB_HIPROC:        return "HIPROC";
             default:                    return Integer.toHexString(id);
         }
     }
@@ -796,15 +744,15 @@ public class ELF {
     public static final int STT_FILE = 4;
     public static final int STT_LOPROC = 13;
     public static final int STT_HIPROC = 15;
-    public static String getSTT(int id) {
+    public static String getSTTString(int id) {
         switch(id) {
-            case ELF.STT_NOTYPE:        return "STT_NOTYPE";
-            case ELF.STT_OBJECT:        return "STT_OBJECT";
-            case ELF.STT_FUNC:          return "STT_FUNC";
-            case ELF.STT_SECTION:       return "STT_SECTION";
-            case ELF.STT_FILE:          return "STT_FILE";
-            case ELF.STT_LOPROC:        return "STT_LOPROC";
-            case ELF.STT_HIPROC:        return "STT_HIPROC";
+            case ELF.STT_NOTYPE:        return "NOTYPE";
+            case ELF.STT_OBJECT:        return "OBJECT";
+            case ELF.STT_FUNC:          return "FUNC";
+            case ELF.STT_SECTION:       return "SECTION";
+            case ELF.STT_FILE:          return "FILE";
+            case ELF.STT_LOPROC:        return "LOPROC";
+            case ELF.STT_HIPROC:        return "HIPROC";
             default:                    return Integer.toHexString(id);
         }
     }

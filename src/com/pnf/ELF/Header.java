@@ -80,7 +80,7 @@ public class Header extends StreamReader {
         eiClass = (byte)stream.read();
         if(eiClass == 0)
             throw new AssertionError("Invalid class");
-        eiClassString = ELF.getClassString(eiClass);
+        eiClassString = ELF.getELFClassString(eiClass);
 
         eiData = (byte)stream.read();
         switch(eiData) {
@@ -93,10 +93,10 @@ public class Header extends StreamReader {
                 endianness = ByteOrder.BIG_ENDIAN;
                 break;
         }
-        eiDataString = ELF.getDataString(eiData);
+        eiDataString = ELF.getELFDataString(eiData);
 
         eiVersion = (byte)stream.read();
-        eiVersionString = ELF.getVersionString(0);
+        eiVersionString = ELF.getEVString(0);
 
         eiOsabi = (byte)stream.read();
         eiAbiversion = (byte)stream.read();
@@ -106,11 +106,11 @@ public class Header extends StreamReader {
 
         /******* Read Header ******/
         eType = readShort(stream);
-        eTypeString = ELF.getTypeString(eType);
+        eTypeString = ELF.getETString(eType);
         eMachine = readShort(stream);
-        eMachineString = ELF.getMachineString(eMachine);
+        eMachineString = ELF.getEMString(eMachine);
         eVersion = readInt(stream);
-        eVersionString = ELF.getVersionString(eVersion);
+        eVersionString = ELF.getEVString(eVersion);
         eEntry = readInt(stream);
         ePhoff = readInt(stream);
         eShoff = readInt(stream);
@@ -243,7 +243,7 @@ public class Header extends StreamReader {
         return magic.toString();
     }
     public String getVersionString() {
-        return ELF.getVersionString(eiVersion);
+        return ELF.getEVString(eiVersion);
     }
     public int getVersion() {
         return eVersion;

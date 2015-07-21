@@ -29,10 +29,10 @@ public class SymbolTableEntry extends StreamReader {
         other = stream.read();
         sectionHeaderIndex = readShort(stream);
         bind = info >> 4;
-        bindString = ELF.getSTB(bind);
+        bindString = ELF.getSTBString(bind);
 
         type = info & 0xf;
-        typeString = ELF.getSTT(type);
+        typeString = ELF.getSTTString(type);
     } 
 
     public void setName(StringTableSection nameTable) {

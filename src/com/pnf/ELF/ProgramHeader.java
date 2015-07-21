@@ -83,7 +83,7 @@ public class ProgramHeader extends StreamReader {
 
         align = readInt(stream);
 
-        typeString = ELF.getSegmentType(type);
+        typeString = ELF.getPTString(type);
 
         if(type == ELF.PT_GNU_STACK && (flags & ELF.PF_X) != 0) {
             notifications.add(new UnitNotification(NotificationType.AREA_OF_INTEREST, "Stack is executable"));

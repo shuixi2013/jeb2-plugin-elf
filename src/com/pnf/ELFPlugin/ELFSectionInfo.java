@@ -20,9 +20,9 @@ public class ELFSectionInfo implements ISegmentInformation {
     public ELFSectionInfo(SectionHeader elfsection) {
         name = elfsection.getName();
         int elfFlags = elfsection.getFlags();
-        this.flags = ((elfFlags & ELF.PF_X) != 0 ? FLAG_EXECUTE : 0) |
-                     ((elfFlags & ELF.PF_R) != 0 ? FLAG_READ : 0) |
-                     ((elfFlags & ELF.PF_W) != 0 ? FLAG_WRITE : 0);
+        this.flags = ((elfFlags & ELF.SHF_EXECINSTR) != 0 ? FLAG_EXECUTE : 0) |
+                     ((elfFlags & ELF.SHF_ALLOC) != 0 ? FLAG_READ : 0) |
+                     ((elfFlags & ELF.SHF_WRITE) != 0 ? FLAG_WRITE : 0);
         fileOffset = elfsection.getOffset();
         memOffset = elfsection.getAddress();
         if(elfsection.getType() == ELF.SHT_NOBITS) {
