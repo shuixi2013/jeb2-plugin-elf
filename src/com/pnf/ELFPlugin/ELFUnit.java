@@ -250,14 +250,17 @@ public class ELFUnit extends AbstractBinaryUnit implements ICodeObjectUnit, IInt
                         }
                     });
                     break;
-                case SHT_HASH:
-                    formatter.addDocumentPresentation(new AbstractUnitRepresentation(section.getName(), false) {
-                        @Override
-                        public IGenericDocument getDocument() {
-                            return new HashTableDocument(section0);
-                        }
-                    });
-                    break;
+                /*
+                 * Can't see this info being useful
+                 * case SHT_HASH:
+                 *    formatter.addDocumentPresentation(new AbstractUnitRepresentation(section.getName(), false) {
+                 *        @Override
+                 *        public IGenericDocument getDocument() {
+                 *            return new HashTableDocument(section0);
+                 *        }
+                 *    });
+                 *    break;
+                 */
                 case SHT_NOTE:
                     formatter.addDocumentPresentation(new AbstractUnitRepresentation(section.getName(), false) {
                         @Override
@@ -284,15 +287,18 @@ public class ELFUnit extends AbstractBinaryUnit implements ICodeObjectUnit, IInt
                         }
                     });
                     break;
-                case SHT_RELA:
-                case SHT_REL:
-                    formatter.addDocumentPresentation(new AbstractUnitRepresentation(section.getName(), false) {
-                        @Override
-                        public IGenericDocument getDocument() {
-                            return new RelocationSectionDocument(section0);
-                        }
-                    });
-                    break;
+                /*
+                 * Not useful to display yet
+                 * case SHT_RELA:
+                 * case SHT_REL:
+                 *     formatter.addDocumentPresentation(new AbstractUnitRepresentation(section.getName(), false) {
+                 *         @Override
+                 *         public IGenericDocument getDocument() {
+                 *             return new RelocationSectionDocument(section0);
+                 *         }
+                 *     });
+                 *     break;
+                 */
             }
         }
 
