@@ -29,23 +29,23 @@ public class ProgramHeader extends StreamReader {
         return typeString;
     }
 
-    public int getOffset() {
+    public int getOffsetInFile() {
         return offset;
     }
 
-    public int getVAddr() {
+    public int getVirtualAddress() {
         return vaddr;
     }
 
-    public int getPAddr() {
+    public int getPhysicalAddress() {
         return paddr;
     }
 
-    public int getFileSize() {
+    public int getSizeInFile() {
         return fileSize;
     }
 
-    public int getMemorySize() {
+    public int getSizeInMemory() {
         return memorySize;
     }
 
@@ -64,7 +64,7 @@ public class ProgramHeader extends StreamReader {
         return section;
     }
 
-    public ProgramHeader(byte[] data, int sectionOffset, List<IUnitNotification> notifications) {
+    public ProgramHeader(byte[] data, int sectionOffset, List<UnitNotification> notifications) {
         ByteArrayInputStream stream = new ByteArrayInputStream(data);
         stream.skip(sectionOffset);
         type = readInt(stream);
@@ -76,7 +76,7 @@ public class ProgramHeader extends StreamReader {
         flags = readInt(stream);
 
         flagsString = "";
-        flagsString = String.format("%c%c%c", 
+        flagsString = String.format("%c%c%c",
                 (flags & ELF.PF_X) != 0 ? 'E' : ' ',
                 (flags & ELF.PF_W) != 0 ? 'W' : ' ',
                 (flags & ELF.PF_R) != 0 ? 'R' : ' ');

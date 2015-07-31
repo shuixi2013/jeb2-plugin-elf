@@ -94,16 +94,16 @@ public class ELFUnit extends AbstractBinaryUnit implements ICodeObjectUnit, IInt
                     symbols.add(new SymbolInformation(symType, 0, (long)entry.getValue(), entry.getName(), (long)entry.getValue(), (long)entry.getValue(), entry.getSize()));
                 }
             }
-            sections.add(new ELFSectionInfo(header));
+            // sections.add(new ELFSectionInfo(header));
             if((header.getFlags() & SHF_ALLOC) != 0) {
+                sections.add(new ELFSectionInfo(header));
+            }
+        }
+        for(ProgramHeader header : elf.getProgramHeaderTable().getHeaders()) {
+            if((header.getType() & PT_LOAD) != 0 && header.getSizeInMemory() > 0) {
                 segments.add(new ELFSectionInfo(header));
             }
         }
-        /*for(ProgramHeader header : elf.getProgramHeaderTable().getHeaders()) {
-            if(header.getMemorySize() > 0 && header.getType() == PT_LOAD) {
-                segments.add(new ELFSectionInfo(header));
-            }
-        }*/
         notifications.addAll(elf.getNotifications());
         byte[] processImage;
         long minAddr = Long.MAX_VALUE;
