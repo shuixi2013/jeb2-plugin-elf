@@ -20,7 +20,7 @@ public class SectionHeaderTable extends StreamReader {
     private List<SectionHeader> relocations = new ArrayList<>();
 
 
-    public SectionHeaderTable(byte[] data, int offset, short entrySize, short number, short nameTableIndex, List<IUnitNotification> notifications) {
+    public SectionHeaderTable(byte[] data, int offset, short entrySize, short number, short nameTableIndex, List<UnitNotification> notifications) {
 
         this.offset = offset;
         this.entrySize = entrySize;

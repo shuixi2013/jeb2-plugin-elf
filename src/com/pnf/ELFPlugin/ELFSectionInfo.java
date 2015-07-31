@@ -35,33 +35,39 @@ public class ELFSectionInfo implements ISegmentInformation {
         }
     }
     public ELFSectionInfo(ProgramHeader elfsection) {
-        name = null;
+        name = "";
         int elfFlags = elfsection.getFlags();
         this.flags = ((elfFlags & ELF.PF_X) != 0 ? FLAG_EXECUTE : 0) |
                      ((elfFlags & ELF.PF_R) != 0 ? FLAG_READ : 0) |
                      ((elfFlags & ELF.PF_W) != 0 ? FLAG_WRITE : 0);
-        fileOffset = elfsection.getOffset();
-        memOffset = elfsection.getVAddr();
-        fileSize = elfsection.getFileSize();
-        memSize = elfsection.getMemorySize();
+        fileOffset = elfsection.getOffsetInFile();
+        memOffset = elfsection.getVirtualAddress();
+        fileSize = elfsection.getSizeInFile();
+        memSize = elfsection.getSizeInMemory();
     }
 
+    @Override
     public int getFlags() {
         return flags;
     }
+    @Override
     public String getName() {
         return name;
     }
+    @Override
     public long getOffsetInFile() {
         return fileOffset;
     }
+    @Override
     public long getOffsetInMemory() {
         return memOffset;
     }
 
+    @Override
     public long getSizeInFile() {
         return fileSize;
     }
+    @Override
     public long getSizeInMemory() {
         return memSize;
     }

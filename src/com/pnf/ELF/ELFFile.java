@@ -4,13 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.pnfsoftware.jeb.core.units.IUnitNotification;
+import com.pnfsoftware.jeb.core.units.UnitNotification;
 import com.pnfsoftware.jeb.util.logging.GlobalLog;
 import com.pnfsoftware.jeb.util.logging.ILogger;
 
 public class ELFFile {
     private static final ILogger logger = GlobalLog.getLogger(ELFFile.class);
 	// Wrapper for ELF Files
-	
+
     private Header header;
 
     private int headerNameStringTable;
@@ -18,13 +19,13 @@ public class ELFFile {
     public byte[] image;
     private long baseAddr;
 
-    private List<IUnitNotification> notifications;
+    private List<UnitNotification> notifications;
 
     public int getHeaderNameStringTable() {
 		return headerNameStringTable;
 	}
 
-    public List<IUnitNotification> getNotifications() {
+    public List<UnitNotification> getNotifications() {
         return notifications;
     }
 
@@ -45,28 +46,27 @@ public class ELFFile {
         int maxAddrSize=0;
         int addr;
         int minAddr=Integer.MAX_VALUE;
-        for(SectionHeader header : sectionHeaderTable.getHeaders()) {
-            addr = header.getAddress();
-            if(addr == 0) {
-                continue;
+        for(ProgramHeader header : programHeaderTable.getHeaders()) {
+            addr = header.getVirtualAddress();
+            if(header.getSizeInMemory() > 0) {
+                if((addr + header.getSizeInMemory()) > maxAddr) {
+                    maxAddr = addr + header.getSizeInMemory();
+                }
+                if(addr < minAddr) {
+                    minAddr = addr;
+                }
             }
-            if(addr > maxAddr) {
-                maxAddr = addr;
-                maxAddrSize = header.getSize();
-            }
-            if(addr < minAddr) {
-                minAddr = addr;
-            }
+
         }
         baseAddr = minAddr;
 
-        image = new byte[maxAddr + maxAddrSize];
+        image = new byte[maxAddr - minAddr];
 
 
-        for(SectionHeader header : sectionHeaderTable.getHeaders()) {
+        for(ProgramHeader header : programHeaderTable.getHeaders()) {
             // Address of 0 indicates it is not in the memory image
-            if(header.getAddress() != 0 && header.getType() != ELF.SHT_NOBITS) {
-                System.arraycopy(data, header.getOffset(), image, header.getAddress(), header.getSize());
+            if(header.getSizeInMemory() > 0 && header.getType() != ELF.SHT_NOBITS) {
+                System.arraycopy(data, header.getOffsetInFile(), image, header.getVirtualAddress() - minAddr, header.getSizeInFile());
             }
         }
         sectionHeaderTable.doRelocations(image);

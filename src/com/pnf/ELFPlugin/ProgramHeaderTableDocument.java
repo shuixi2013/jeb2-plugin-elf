@@ -34,11 +34,11 @@ public class ProgramHeaderTableDocument extends JebEventSource implements ITable
             header = headers.get(index);
             cells.add(new Cell("" + index));
             cells.add(new Cell(header.getTypeString()));
-            cells.add(new Cell(String.format("%x", header.getOffset())));
-            cells.add(new Cell(String.format("%x", header.getVAddr())));
-            cells.add(new Cell(String.format("%x", header.getPAddr())));
-            cells.add(new Cell(String.format("%x", header.getMemorySize())));
-            cells.add(new Cell(String.format("%x", header.getFileSize())));
+            cells.add(new Cell(String.format("%x", header.getOffsetInFile())));
+            cells.add(new Cell(String.format("%x", header.getVirtualAddress())));
+            cells.add(new Cell(String.format("%x", header.getPhysicalAddress())));
+            cells.add(new Cell(String.format("%x", header.getSizeInMemory())));
+            cells.add(new Cell(String.format("%x", header.getSizeInFile())));
             cells.add(new Cell(String.format("%s", header.getFlagsString())));
             cells.add(new Cell(String.format("%x", header.getAlign())));
             rows.add(new TableRow(cells));
