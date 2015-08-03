@@ -8,44 +8,45 @@ public class SymbolTableSection extends Section {
 
 	// Wraps the bytes of a Symbol Table
 	// Keeps a list of entries for the data
-	
-    private int entrySize;
-    private List<SymbolTableEntry> entries = new ArrayList<>();
 
-    private StringTableSection nameTable;
+	private int entrySize;
+	private List<SymbolTableEntry> entries = new ArrayList<>();
 
-    public SymbolTableSection(byte[] data, int size, int offset, int entrySize, StringTableSection nameTable) {
-        super(data, size, offset);
-        this.entrySize = entrySize;
-        this.nameTable = nameTable;
-        for(int index=0; index < size / entrySize; index++) {
-            entries.add(new SymbolTableEntry(data, offset + index * entrySize));
-        }
-    }
+	private StringTableSection nameTable;
 
+	public SymbolTableSection(byte[] data, int size, int offset, int entrySize,
+			StringTableSection nameTable) {
+		super(data, size, offset);
+		this.entrySize = entrySize;
+		this.nameTable = nameTable;
+		for (int index = 0; index < size / entrySize; index++) {
+			entries.add(new SymbolTableEntry(data, offset + index * entrySize));
+		}
+	}
 
-    public SymbolTableEntry getEntry(int index) {
-        return entries.get(index);
-    }
-    public List<SymbolTableEntry> getEntries() {
-        return entries;
-    }
+	public SymbolTableEntry getEntry(int index) {
+		return entries.get(index);
+	}
 
-    @Override
-    public void setNameTable(StringTableSection nameTable) {
-        super.setNameTable(nameTable);
-        for(SymbolTableEntry entry : entries) {
-            entry.setName(nameTable);
-        }
-    }
+	public List<SymbolTableEntry> getEntries() {
+		return entries;
+	}
 
-    public HashMap<Integer, String> toHashMap() {
-        HashMap<Integer, String> output = new HashMap<>();
-        for(SymbolTableEntry entry : entries) {
-            if(entry.getType() == ELF.STT_FUNC)
-                output.put(entry.getValue(), entry.getName());
-        }
-        return output;
-    }
+	@Override
+	public void setNameTable(StringTableSection nameTable) {
+		super.setNameTable(nameTable);
+		for (SymbolTableEntry entry : entries) {
+			entry.setName(nameTable);
+		}
+	}
+
+	public HashMap<Integer, String> toHashMap() {
+		HashMap<Integer, String> output = new HashMap<>();
+		for (SymbolTableEntry entry : entries) {
+			if (entry.getType() == ELF.STT_FUNC)
+				output.put(entry.getValue(), entry.getName());
+		}
+		return output;
+	}
 
 }

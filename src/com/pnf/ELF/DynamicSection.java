@@ -5,27 +5,28 @@ import java.util.List;
 
 public class DynamicSection extends Section {
 
-    private List<DynamicSectionEntry> entries = new ArrayList<>();
-    private SectionHeader stringTable;
-    public DynamicSection(byte[] data, int size, int offset, int sh_entsize) {
-        super(data, size, offset);
+	private List<DynamicSectionEntry> entries = new ArrayList<>();
+	private SectionHeader stringTable;
 
-        for(int index=offset; index < offset + size; index += sh_entsize) {
+	public DynamicSection(byte[] data, int size, int offset, int sh_entsize) {
+		super(data, size, offset);
 
-            entries.add(new DynamicSectionEntry(data, sh_entsize, index));
-        }
+		for (int index = offset; index < offset + size; index += sh_entsize) {
 
-    }
-    public List<DynamicSectionEntry> getEntries() {
-        return entries;
-    }
+			entries.add(new DynamicSectionEntry(data, sh_entsize, index));
+		}
 
-    public void setStringTable(SectionHeader stringTable) {
-        this.stringTable = stringTable;
-        for(DynamicSectionEntry entry : entries) {
-            entry.setStringTable(stringTable);
-        }
-    }
+	}
 
+	public List<DynamicSectionEntry> getEntries() {
+		return entries;
+	}
+
+	public void setStringTable(SectionHeader stringTable) {
+		this.stringTable = stringTable;
+		for (DynamicSectionEntry entry : entries) {
+			entry.setStringTable(stringTable);
+		}
+	}
 
 }

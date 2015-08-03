@@ -15,81 +15,82 @@ import com.pnfsoftware.jeb.core.output.table.impl.TableRow;
 import com.pnfsoftware.jeb.util.logging.GlobalLog;
 import com.pnfsoftware.jeb.util.logging.ILogger;
 
-public class SectionHeaderTableDocument extends JebEventSource implements ITableDocument {
-    private static final ILogger logger = GlobalLog.getLogger(StringTableDocument.class);
+public class SectionHeaderTableDocument extends JebEventSource implements
+		ITableDocument {
+	private static final ILogger logger = GlobalLog
+			.getLogger(StringTableDocument.class);
 
-    SectionHeaderTable headerTable;
+	SectionHeaderTable headerTable;
 
-    List<TableRow> rows;
+	List<TableRow> rows;
 
-    public SectionHeaderTableDocument(SectionHeaderTable headerTable) {
-        this.headerTable = headerTable;
+	public SectionHeaderTableDocument(SectionHeaderTable headerTable) {
+		this.headerTable = headerTable;
 
-        rows = new ArrayList<>();
-        List<SectionHeader> headers = headerTable.getHeaders();
-        List<Cell> cells;
-        SectionHeader header;
-        for(int index=0; index < headers.size(); index++) {
-            cells = new ArrayList<>();
-            header = headers.get(index);
-            cells.add(new Cell("" + index));
-            cells.add(new Cell("" + header.getName()));
-            cells.add(new Cell("" + header.getType_s()));
-            cells.add(new Cell(String.format("%h", header.getAddress())));
-            cells.add(new Cell(String.format("%h", header.getOffset())));
-            cells.add(new Cell(String.format("%h", header.getSize())));
-            cells.add(new Cell("" + header.getFlagsString()));
-            cells.add(new Cell("" + header.getLink()));
-            cells.add(new Cell("" + header.getInfo()));
-            cells.add(new Cell("" + header.getAddressAlign()));
-            rows.add(new TableRow(cells));
-        }
-    }
+		rows = new ArrayList<>();
+		List<SectionHeader> headers = headerTable.getHeaders();
+		List<Cell> cells;
+		SectionHeader header;
+		for (int index = 0; index < headers.size(); index++) {
+			cells = new ArrayList<>();
+			header = headers.get(index);
+			cells.add(new Cell("" + index));
+			cells.add(new Cell("" + header.getName()));
+			cells.add(new Cell("" + header.getType_s()));
+			cells.add(new Cell(String.format("%h", header.getAddress())));
+			cells.add(new Cell(String.format("%h", header.getOffset())));
+			cells.add(new Cell(String.format("%h", header.getSize())));
+			cells.add(new Cell("" + header.getFlagsString()));
+			cells.add(new Cell("" + header.getLink()));
+			cells.add(new Cell("" + header.getInfo()));
+			cells.add(new Cell("" + header.getAddressAlign()));
+			rows.add(new TableRow(cells));
+		}
+	}
 
-    @Override
-    public List<String> getColumnLabels() {
-        ArrayList<String> output = new ArrayList<>();
-        output.add("Index");
-        output.add("Name");
-        output.add("Type");
-        output.add("Address");
-        output.add("Offset");
-        output.add("Size");
-        output.add("Flags");
-        output.add("Link");
-        output.add("Info");
-        output.add("Addr Align");
-        return output;
-    }
+	@Override
+	public List<String> getColumnLabels() {
+		ArrayList<String> output = new ArrayList<>();
+		output.add("Index");
+		output.add("Name");
+		output.add("Type");
+		output.add("Address");
+		output.add("Offset");
+		output.add("Size");
+		output.add("Flags");
+		output.add("Link");
+		output.add("Info");
+		output.add("Addr Align");
+		return output;
+	}
 
-    @Override
-    public int getRowCount() {
-        return rows.size();
-    }
+	@Override
+	public int getRowCount() {
+		return rows.size();
+	}
 
-    @Override
-    public ITableDocumentPart getTable() {
-        return getTablePart(0, rows.size());
-    }
+	@Override
+	public ITableDocumentPart getTable() {
+		return getTablePart(0, rows.size());
+	}
 
-    @Override
-    public ITableDocumentPart getTablePart(int start, int count) {
-        return new TableDocumentPart(start, rows.subList(start, start+count));
-    }
+	@Override
+	public ITableDocumentPart getTablePart(int start, int count) {
+		return new TableDocumentPart(start, rows.subList(start, start + count));
+	}
 
+	@Override
+	public ICellCoordinates addressToCoordinates(String address) {
+		return null;
+	}
 
-    @Override
-    public ICellCoordinates addressToCoordinates(String address) {
-        return null;
-    }
+	@Override
+	public String coordinatesToAddress(ICellCoordinates coordinates) {
+		return null;
+	}
 
-    @Override
-    public String coordinatesToAddress(ICellCoordinates coordinates) {
-        return null;
-    }
-
-    @Override
-    public void dispose() {
-    }
+	@Override
+	public void dispose() {
+	}
 
 }
