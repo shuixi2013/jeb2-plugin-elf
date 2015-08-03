@@ -26,10 +26,9 @@ public class ELFPlugin extends AbstractUnitIdentifier {
     public PluginInformation getPluginInformation() {
         return new PluginInformation("ELF File Unit", "Linux ELF parser plugin", "1.0", "PNF Software");
     }
-
     @Override
-    public void initialize(IPropertyDefinitionManager parent, IPropertyManager pm) {
-        super.initialize(parent, pm);
+    public void initialize(IPropertyDefinitionManager parent) {
+        super.initialize(parent);
     }
     
 
