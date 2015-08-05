@@ -21,6 +21,7 @@ package com.pnf.plugin.elf;
 import com.pnf.plugin.elf.internal.ELF;
 import com.pnfsoftware.jeb.core.IUnitCreator;
 import com.pnfsoftware.jeb.core.PluginInformation;
+import com.pnfsoftware.jeb.core.Version;
 import com.pnfsoftware.jeb.core.input.IInput;
 import com.pnfsoftware.jeb.core.properties.IPropertyDefinitionManager;
 import com.pnfsoftware.jeb.core.units.AbstractUnitIdentifier;
@@ -42,7 +43,7 @@ public class ELFPlugin extends AbstractUnitIdentifier {
 
     @Override
     public PluginInformation getPluginInformation() {
-        return new PluginInformation("ELF File Unit", "Linux ELF parser plugin", "1.0", "PNF Software");
+        return new PluginInformation("ELF File Unit", "Linux ELF parser plugin", "PNF Software", Version.create(0, 2, 0));
     }
 
     @Override
