@@ -43,7 +43,7 @@ public class ELFPlugin extends AbstractUnitIdentifier {
 
     @Override
     public PluginInformation getPluginInformation() {
-        return new PluginInformation("ELF File Unit", "Linux ELF parser plugin", "PNF Software", Version.create(0, 2, 0));
+        return new PluginInformation("ELF File Unit", "Linux ELF parser plugin", "PNF Software", Version.create(1, 0, 1));
     }
 
     @Override
