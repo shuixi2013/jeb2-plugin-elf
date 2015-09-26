@@ -29,8 +29,6 @@ public class SymbolTableSection extends Section {
     @SuppressWarnings("unused")
     private int entrySize;
     private List<SymbolTableEntry> entries = new ArrayList<>();
-    @SuppressWarnings("unused")
-    private StringTableSection nameTable;
 
     public SymbolTableSection(byte[] data, int size, int offset, int entrySize, StringTableSection nameTable) {
         super(data, size, offset);

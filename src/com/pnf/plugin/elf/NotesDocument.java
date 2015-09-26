@@ -25,7 +25,9 @@ import com.pnf.plugin.elf.internal.NoteSection;
 import com.pnf.plugin.elf.internal.NoteSectionEntry;
 import com.pnf.plugin.elf.internal.SectionHeader;
 import com.pnfsoftware.jeb.core.events.JebEventSource;
+import com.pnfsoftware.jeb.core.output.text.IAnchor;
 import com.pnfsoftware.jeb.core.output.text.ICoordinates;
+import com.pnfsoftware.jeb.core.output.text.ILine;
 import com.pnfsoftware.jeb.core.output.text.ITextDocument;
 import com.pnfsoftware.jeb.core.output.text.ITextDocumentPart;
 import com.pnfsoftware.jeb.core.output.text.impl.Anchor;
@@ -38,8 +40,8 @@ public class NotesDocument extends JebEventSource implements ITextDocument {
     @SuppressWarnings("unused")
     private static final ILogger logger = GlobalLog.getLogger(NotesDocument.class);
 
-    private List<Line> lines;
-    private List<Anchor> anchors;
+    private List<ILine> lines;
+    private List<IAnchor> anchors;
 
     public NotesDocument(SectionHeader section) {
         lines = new ArrayList<>();

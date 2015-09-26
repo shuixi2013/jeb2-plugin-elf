@@ -51,6 +51,8 @@ public class SymbolInfo implements ISymbolInformation {
         case STT_OBJECT:
             this.type = SymbolType.OBJECT;
             break;
+        default:
+            break;
         }
     }
 

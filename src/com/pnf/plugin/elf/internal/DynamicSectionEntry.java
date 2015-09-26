@@ -136,7 +136,8 @@ public class DynamicSectionEntry extends StreamReader {
             break;
         case ELF.DT_HIPROC:
             break;
-
+        default:
+            break;
         }
     }
 
@@ -149,7 +150,7 @@ public class DynamicSectionEntry extends StreamReader {
                 valString = ((StringTableSection)stringTable.getSection()).getString(val);
                 break;
             }
-            // Otherwise fall through to default
+            //$FALL-THROUGH$
         default:
             valString = Integer.toHexString(un);
         }

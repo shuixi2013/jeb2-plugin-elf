@@ -110,6 +110,8 @@ public class Header extends StreamReader {
         case ELF.ELFDATA2MSB:
             endianness = ByteOrder.BIG_ENDIAN;
             break;
+        default:
+            break;
         }
         eiDataString = ELF.getELFDataString(eiData);
 

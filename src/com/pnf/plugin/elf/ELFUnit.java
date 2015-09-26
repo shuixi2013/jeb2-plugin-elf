@@ -114,6 +114,8 @@ public class ELFUnit extends AbstractBinaryUnit implements ICodeObjectUnit, IInt
                     case STT_OBJECT:
                         symType = SymbolType.OBJECT;
                         break;
+                    default:
+                        break;
                     }
                     symbols.add(new SymbolInformation(symType, 0, (long)entry.getValue(), entry.getName(), (long)entry.getValue(),
                             (long)entry.getValue(), entry.getSize()));
@@ -315,6 +317,8 @@ public class ELFUnit extends AbstractBinaryUnit implements ICodeObjectUnit, IInt
              * @Override public IGenericDocument getDocument() { return new
              * RelocationSectionDocument(section0); } }); break;
              */
+            default:
+                break;
             }
         }
 

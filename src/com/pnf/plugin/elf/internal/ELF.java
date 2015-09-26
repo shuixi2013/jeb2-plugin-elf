@@ -1154,6 +1154,8 @@ public class ELF {
             return 0;
         case R_MIPS_REL_32:
             return S + A - EA;
+        default:
+            break;
         }
         throw new RuntimeException(String.format("Relocation type %d not recognized. Please add it", id));
     }

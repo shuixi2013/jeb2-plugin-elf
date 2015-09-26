@@ -23,10 +23,6 @@ import java.util.List;
 
 public class RelocationSection extends Section {
     @SuppressWarnings("unused")
-    private int size;
-    @SuppressWarnings("unused")
-    private int offset;
-    @SuppressWarnings("unused")
     private int entrySize;
     @SuppressWarnings("unused")
     private boolean RELA;
