@@ -1,4 +1,13 @@
+## This plugin is deprecated
+
+This plugin has been deprecated: of JEB 2.1 ships with a native ELF plugin.
+
+It should be used for educational purpose only.
+
+
 # jeb2-plugin-elf
+
+Deprecated: requires JEB 2.0.
 
 JEB2 Plugin for parsing Linux ELF executables
 
